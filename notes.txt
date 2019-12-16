@@ -1,3 +1,8 @@
+
+// Server Running
 sudo mongod --repair
 sudo mongod
 mongo
+
+// App Running
+npm run dev
