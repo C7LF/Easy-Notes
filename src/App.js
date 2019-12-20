@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
+import { NewNoteSection } from './components/new.note';
+
+
+const handleClick = (noteId) => {
+  axios.delete(`http://localhost:3001/notes/${noteId}`)
+}
 
 function App() {
 
@@ -9,7 +15,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios(
-        'http://192.168.1.81:3001/notes',
+        'http://localhost:3001/notes',
       );
       setData(result.data);
     };
@@ -23,9 +29,11 @@ function App() {
         <li key={item._id}>
           {item.title}
           {item.content}
+          <input onClick={handleClick(item._id)} value="x" type="submit" />
         </li>
       ))}
       </ul>
+    <NewNoteSection />
     </div>
   );
 }
