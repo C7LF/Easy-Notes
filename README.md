@@ -1,4 +1,4 @@
-<strong>WIP</string> This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<strong>WIP</strong> This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
