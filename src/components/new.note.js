@@ -1,35 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState, useEffect} from 'react'
+import 
 import axios from 'axios'
 
-export const NewNoteSection = () => {
 
+export const handleChange = (event) => {
+  setNewNote({...newNote, [event.target.name]: event.target.value})
+}
 
-  const postURL = 'http://localhost:3001/notes'
+export const [newNote, setNewNote] = useState(
+  {title: '', content: ''}
+);
 
-  const [newNote, setNewNote] = useState(
-    {title: '', content: ''}
-  );
-
-  const handleChange = (event) => {
-    setNewNote({...newNote, [event.target.name]: event.target.value})
-  }
-
-  const handleSubmit = (e) => {
+  export const handleSubmit = (e) => {
+  
     e.preventDefault()
-    axios.post(postURL, newNote)
-      .then(function(response) {
-          console.log(response)
-      })
+    axios.post('http://localhost:3001/api/notes', newNote)
+      .then(() => fetchData())
       .catch(function (error) {
           console.log(error)
       }) 
   }
   
-  return (
-      <form onSubmit={handleSubmit}>
-        <input type="text" name='title' value={newNote.title} onChange={handleChange} />
-        <input type="text" name='content' value={newNote.content} onChange={handleChange} />
-        <input type="submit" />
-      </form>
-  )
-}
