@@ -36,3 +36,25 @@
     transform: rotate(360deg);
   }
 }
+
+/* https://jsfiddle.net/133rr51u/ */
+
+/* Styles */
+.notes__bigform {
+  width:100%;
+  background-color:blue;
+  padding:5px;
+}
+.notes__add-wrapper {
+  position: fixed;
+  bottom:0;
+  width:100%;
+  background-color: #efefef;
+  padding:16px;
+}
+.notes__text-inputs {
+  width:90%;
+}
+.notes__text-inputs input {
+  width:100%;
+}
