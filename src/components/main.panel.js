@@ -54,8 +54,8 @@ export default function MainFunc() {
       <div className="notes__bigform">
       <form onSubmit={handleSubmit} className="notes__add-form">
       <div className="notes__text-inputs">
-        <input type="text" name='title' value={newNote.title} onChange={handleChange} />
-        <input type="text" name='content' value={newNote.content} onChange={handleChange} />
+        <input type="text" name='title' placeholder="title..." value={newNote.title} onChange={handleChange} />
+        <textarea name='content' placeholder="text..." value={newNote.content} onChange={handleChange} />
       </div>
       <div className="notes__button-input">
         <input type="submit" />
