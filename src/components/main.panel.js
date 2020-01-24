@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../App.css';
+import {useGlobalState} from './state'
 
 export default function MainFunc() {
-  const [data, setData] = useState([]);
-  const [newNote, setNewNote] = useState(
-    {title: '', content: ''}
-  );
+  const className = 'notes'
+  const [data, setData] = useGlobalState('data');
 
   const fetchData = async () => {
     const result = await axios(
@@ -18,51 +17,21 @@ export default function MainFunc() {
     fetchData();
   }, []);
 
-  // New Note
-
-  const handleChange = (event) => {
-    setNewNote({...newNote, [event.target.name]: event.target.value})
-  }
   const handleClick = (noteId) => {
     axios.delete(`http://localhost:3001/api/notes/${noteId}`).then( () => fetchData())
   }
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    axios.post('http://localhost:3001/api/notes', newNote)
-      .then(() => fetchData())
-      .catch(function (error) {
-          console.log(error)
-      }) 
-  }
-
-  // New Note end
 
   return (
     <>
-      <ul>
+      <ul className={`${className}__list`}>
       {data.map(item => (
-        <li key={item._id}>
-          {item.title}
-          {item.content}
+        <li key={item._id} className="notes__item">
+          {<p className={`${className}__item-title`}>{item.title}</p>}
+          {<p>{item.content}</p>}
           <div onClick={() => handleClick(item._id)}>x</div>
         </li>
       ))}
       </ul>
-
-    {/* <NewNoteSection /> */}
-    <div className="notes__add-wrapper">
-      <div className="notes__bigform">
-      <form onSubmit={handleSubmit} className="notes__add-form">
-      <div className="notes__text-inputs">
-        <input type="text" name='title' placeholder="title..." value={newNote.title} onChange={handleChange} />
-        <textarea name='content' placeholder="text..." value={newNote.content} onChange={handleChange} />
-      </div>
-      <div className="notes__button-input">
-        <input type="submit" />
-      </div>
-      </form>
-      </div>
-    </div>
     </>
   );
 }

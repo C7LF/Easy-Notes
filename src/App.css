@@ -6,13 +6,17 @@ body,html {
   padding:0;
 }
 .notes__bigform {
-  background-color:#bd7d7d;
   padding:5px;
+  height:100%
 }
 .notes__add-wrapper {
-  position: relative;
-  width:100%;
   background-color: #efefef;
+  position: absolute;/*important*/
+  top: 50%;/*position Y halfway in*/
+  left: 50%;/*position X halfway in*/
+  transform: translate(-50%,-50%);/*move it halfway back(x,y)*/
+  width: 500px;/*any width*/
+  height: auto;/*any height*/
 }
 .notes__text-inputs {
   width:100%;
@@ -30,4 +34,22 @@ input:focus, textarea:focus {
   border:none;
   padding:8px;
   font-size:14px;
+}
+.notes__list {
+  list-style-type:none;
+  padding: 5px;
+  line-height: .4em;
+  margin:0;
+}
+.notes__item{
+  padding:10px 0px;
+}
+.notes__item-title {
+  font-weight: bold;
+}
+.sidebar {
+  height:100vh;
+  background-color:rgb(214, 214, 214);
+  width:80px;
+  float:left;
 }
