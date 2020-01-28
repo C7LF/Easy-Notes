@@ -56,7 +56,7 @@ export const SideBar = () => {
 
     return (
         <div className="sidebar">
-            <FontAwesomeIcon icon={faFile} onClick={modalState} />
+            <FontAwesomeIcon icon={faFile} onClick={modalState} size="lg" />
             <Modal isVisible={modal} content={newNoteContent()}/>
         </div>
         
