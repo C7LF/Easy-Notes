@@ -5,6 +5,9 @@ body,html {
   margin:0;
   padding:0;
 }
+#root {
+  display: flex;
+}
 .notes__bigform {
   padding:5px;
   height:100%
@@ -40,6 +43,7 @@ input:focus, textarea:focus {
   padding: 5px;
   line-height: .4em;
   margin:0;
+  flex:15% 0 1;
 }
 .notes__item{
   padding:10px 0px;
@@ -50,6 +54,7 @@ input:focus, textarea:focus {
 .sidebar {
   height:100vh;
   background-color:rgb(214, 214, 214);
-  width:80px;
-  float:left;
+  flex: 0 0 50px;
+  text-align: center;
+  padding:24px 0;
 }
