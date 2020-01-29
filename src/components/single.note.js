@@ -1,23 +1,31 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios';
 
-export const SingleNoteView = () => {
+export const SingleNoteView = ({cn}) => {
 
-    const [singleData, setSingleData] = useState([]);
+    const [singleData, setSingleData] = useState();
 
-    const fetchData = async () => {
+    const fetchData2 = async () => {
         const result = await axios(
-          'http://localhost:3001/api/notes/5e2b14c46cec9643c4fe1b64',
-        ).then( result => {setSingleData(result.singleData)})
+          `http://localhost:3001/api/notes/${cn}`
+        ).then( result => {
+          setSingleData(result.data)
+        })
       };
-    
+
       useEffect(() => {
-        fetchData();
+        fetchData2();
       }, []);
-      fetchData();
+  
           return (
-              <>
-                <div>{singleData}</div>
-              </>
+              <div>
+                {console.log(singleData)}
+                {singleData && singleData.map(item => (
+                  <>
+                    <p className={`__item-title`}>{item.title}</p>
+                    <p>{item.content}</p>
+                  </>
+                ))}
+              </div>
           )
 }

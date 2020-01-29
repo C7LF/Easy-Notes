@@ -10,7 +10,6 @@ function App() {
     <>
       <SideBar />
       <MainFunc />
-      <SingleNoteView />
     </>
   )
 }
