@@ -9,23 +9,24 @@ export const SingleNoteView = ({cn}) => {
         const result = await axios(
           `http://localhost:3001/api/notes/${cn}`
         ).then( result => {
+          console.log('test')
           setSingleData(result.data)
         })
       };
 
       useEffect(() => {
         fetchData2();
-      }, []);
-  
+      }, [cn]);
           return (
               <div>
                 {console.log(singleData)}
-                {singleData && singleData.map(item => (
+                {singleData &&
                   <>
-                    <p className={`__item-title`}>{item.title}</p>
-                    <p>{item.content}</p>
+                    <p className={`__item-title`}>{singleData.title}</p>
+                    <p>{singleData.content}</p>
                   </>
-                ))}
+                }
+                
               </div>
           )
 }
