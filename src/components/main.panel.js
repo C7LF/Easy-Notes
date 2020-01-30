@@ -2,11 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../App.css';
 import {useGlobalState} from './state'
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom'
 import { SingleNoteView } from './single.note';
 
 export default function MainFunc() {
@@ -24,10 +19,6 @@ export default function MainFunc() {
     fetchData();
   }, []);
 
-  const handleClick = (noteId) => {
-    axios.delete(`http://localhost:3001/api/notes/${noteId}`).then( () => fetchData())
-  }
-
   const selectSingleNote = (noteId) => { 
      setCurrentNote(noteId)
   }
@@ -39,7 +30,6 @@ export default function MainFunc() {
         <li key={item._id} className="notes__item" onClick={() => {selectSingleNote(item._id)}}>
           {<p className={`${className}__item-title`}>{item.title}</p>}
           {<p>{item.content}</p>}
-          <div onClick={() => handleClick(item._id)}>x</div>
         </li>
       ))}
       </ul>
