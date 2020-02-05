@@ -5,11 +5,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons'
 import { faBookmark } from '@fortawesome/free-solid-svg-icons'
+import {Editor, convertToHTML, EditorState, ContentState, convertFromRaw, convertToRaw} from 'draft-js';
 
 export const SingleNoteView = ({cn}) => {
 
     const [singleData, setSingleData] = useState();
     const [data, setData] = useGlobalState('data');
+    const [editorState, setEditorState] = React.useState(
+      EditorState.createEmpty()
+    );
 
     const className = 'single-note'
 
@@ -18,6 +22,7 @@ export const SingleNoteView = ({cn}) => {
         `http://localhost:3001/api/notes/${cn}`
       ).then( result => {
         setSingleData(result.data)
+        setEditorState(EditorState.createWithContent(ContentState.createFromText(result.data.content)))
       })
     };
 
@@ -63,6 +68,16 @@ export const SingleNoteView = ({cn}) => {
           </div>
         )
       }
+
+      const changeText = async (cn) => {
+        const result = await axios.put(
+          `http://localhost:3001/api/notes/${cn}`, editorState.getCurrentContent() 
+          ).then( result => {setData(result.data)})
+      };
+      
+      // To do:
+
+      // Editor onchange 'changeText' put request -> currently returns editorState object
       
       return (
         <div>
@@ -70,8 +85,11 @@ export const SingleNoteView = ({cn}) => {
             <div className={`${className}__wrapper`}>
             <ToolBar />
               <div className={`${className}__inner`}>
-                <input type="text" className={`${className}__title`} defaultValue={singleData.title} onChange=''/>
-                <textarea defaultValue={singleData.content} />
+                <p className={`${className}__title`}>{singleData.title}</p>
+                <p>{singleData.content}</p>
+                {console.log(convertToRaw(editorState.getCurrentContent()))}
+
+                <Editor editorState={editorState} onChange={setEditorState} />
               </div>
             </div>
           }     
