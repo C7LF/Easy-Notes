@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons'
 import { faBookmark } from '@fortawesome/free-solid-svg-icons'
+import {stateToHTML} from 'draft-js-export-html';
 import {Editor, convertToHTML, EditorState, ContentState, convertFromRaw, convertToRaw} from 'draft-js';
 
 export const SingleNoteView = ({cn}) => {
@@ -22,7 +23,9 @@ export const SingleNoteView = ({cn}) => {
         `http://localhost:3001/api/notes/${cn}`
       ).then( result => {
         setSingleData(result.data)
-        setEditorState(EditorState.createWithContent(ContentState.createFromText(result.data.content)))
+        //setEditorState(EditorState.createWithContent(ContentState.createFromText(JSON.parse(result.data.content))))
+        setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(result.data.content))))
+        //setEditorState(EditorState.createWithContent(ContentState.createFromText(result.data.content)))
       })
     };
 
@@ -71,7 +74,7 @@ export const SingleNoteView = ({cn}) => {
 
       const changeText = async (cn) => {
         const result = await axios.put(
-          `http://localhost:3001/api/notes/${cn}`, editorState.getCurrentContent() 
+          `http://localhost:3001/api/notes/${cn}`, JSON.stringify(convertToRaw(editorState.getCurrentContent())) 
           ).then( result => {setData(result.data)})
       };
       
@@ -86,8 +89,7 @@ export const SingleNoteView = ({cn}) => {
             <ToolBar />
               <div className={`${className}__inner`}>
                 <p className={`${className}__title`}>{singleData.title}</p>
-                <p>{singleData.content}</p>
-                {console.log(convertToRaw(editorState.getCurrentContent()))}
+                {console.log(JSON.stringify(convertToRaw(editorState.getCurrentContent())))}
 
                 <Editor editorState={editorState} onChange={setEditorState} />
               </div>
