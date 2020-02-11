@@ -29,7 +29,7 @@ export default function MainFunc() {
       {data.map(item => (
         <li key={item._id} className="notes__item" onClick={() => {selectSingleNote(item._id)}}>
           {<p className={`${className}__item-title`}>{item.title}</p>}
-          {<p>{item.content}</p>}
+          {<p></p>}
         </li>
       ))}
       </ul>

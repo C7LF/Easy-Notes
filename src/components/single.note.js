@@ -80,7 +80,7 @@ export const SingleNoteView = ({cn}) => {
       
       // To do:
 
-      // Editor onchange 'changeText' put request -> currently returns editorState object
+      // Fix problem with getting content JSON.parse?
       
       return (
         <div>
