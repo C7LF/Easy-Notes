@@ -7,6 +7,7 @@ import { faShareAlt } from '@fortawesome/free-solid-svg-icons'
 import { faBookmark } from '@fortawesome/free-solid-svg-icons'
 import {stateToHTML} from 'draft-js-export-html';
 import {Editor, convertToHTML, EditorState, ContentState, convertFromRaw, convertToRaw} from 'draft-js';
+import 'draft-js/dist/Draft.css';
 
 export const SingleNoteView = ({cn}) => {
 
@@ -23,9 +24,8 @@ export const SingleNoteView = ({cn}) => {
         `http://localhost:3001/api/notes/${cn}`
       ).then( result => {
         setSingleData(result.data)
-        //setEditorState(EditorState.createWithContent(ContentState.createFromText(JSON.parse(result.data.content))))
-        setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(result.data.content))))
-        //setEditorState(EditorState.createWithContent(ContentState.createFromText(result.data.content)))
+        const contentState = convertFromRaw(JSON.parse(result.data.content));
+        setEditorState(EditorState.createWithContent(contentState))
       })
     };
 
@@ -72,11 +72,20 @@ export const SingleNoteView = ({cn}) => {
         )
       }
 
-      const changeText = async (cn) => {
-        const result = await axios.put(
-          `http://localhost:3001/api/notes/${cn}`, JSON.stringify(convertToRaw(editorState.getCurrentContent())) 
-          ).then( result => {setData(result.data)})
-      };
+      const changeText = editorState  => setEditorState(editorState)
+        // const result = await axios.put(
+        // `http://localhost:3001/api/notes/${cn}`, { title: 'changed title', content: JSON.stringify(convertToRaw(editorState.getCurrentContent()))}
+        // )
+        
+
+          // There was a change in the content 
+
+
+          // The change was triggered by a change in focus/selection
+        // const result = await axios.put(
+        //   `http://localhost:3001/api/notes/${cn}`, { ...singleData, content: JSON.stringify(convertToRaw(editorState.getCurrentContent()))}
+        //   ).then( result => {setSingleData(result.data)})
+   
       
       // To do:
 
@@ -91,7 +100,7 @@ export const SingleNoteView = ({cn}) => {
                 <p className={`${className}__title`}>{singleData.title}</p>
                 {console.log(JSON.stringify(convertToRaw(editorState.getCurrentContent())))}
 
-                <Editor editorState={editorState} onChange={setEditorState} />
+                <Editor editorState={editorState} onChange={changeText} />
               </div>
             </div>
           }     
