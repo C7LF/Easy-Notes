@@ -10,7 +10,7 @@ export const SideBar = () => {
 
     const [modal, setModal] = useState(false)
     const [newNote, setNewNote] = useState(
-      {title: "test", content: {"blocks":[{"key":"b11l","text":"test","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}}
+      {title: "test", content: '{"blocks":[{"key":"b11l","text":"test","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'}
     );
 
     const newNotePage = () => {
