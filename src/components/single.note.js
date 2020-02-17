@@ -10,7 +10,6 @@ import {Editor, convertToHTML, EditorState, ContentState, convertFromRaw, conver
 import 'draft-js/dist/Draft.css';
 
 export const SingleNoteView = ({cn}) => {
-
     const [singleData, setSingleData] = useState();
     const [data, setData] = useGlobalState('data');
     const [editorState, setEditorState] = React.useState(
@@ -35,75 +34,70 @@ export const SingleNoteView = ({cn}) => {
         ).then( result => {setData(result.data)})
     };
 
-      useEffect(() => {
-        fetchSingleData();
-      }, [cn]);
+    useEffect(() => {
+      fetchSingleData();
+    }, [cn]);
 
-      const deleteNote = () => {
-        axios.delete(`http://localhost:3001/api/notes/${cn}`).then(() => fetchData() & setSingleData(null))
-      }
+    const deleteNote = () => {
+      axios.delete(`http://localhost:3001/api/notes/${cn}`).then(() => fetchData() & setSingleData(null))
+    }
 
-      const formattedDate = (nPDate) => {
-        const createdDateParsed = new Date(Date.parse(nPDate))
-        const day = createdDateParsed.getDate()
-        const monthData = createdDateParsed.getMonth()
-        const year = createdDateParsed.getFullYear()
+    const formattedDate = (nPDate) => {
+      const createdDateParsed = new Date(Date.parse(nPDate))
+      const day = createdDateParsed.getDate()
+      const monthData = createdDateParsed.getMonth()
+      const year = createdDateParsed.getFullYear()
 
-        const month = ["January","February","March","April","May","June","July","August","September","October","November","December",];
+      const month = ["January","February","March","April","May","June","July","August","September","October","November","December",];
 
-        const formattedString = day + ' ' + month[monthData] + ' ' + year
+      const formattedString = day + ' ' + month[monthData] + ' ' + year
 
-        return formattedString
+      return formattedString
+    }
 
-      }
-
-      const ToolBar = () => {
-        return (
-          <div className={`${className}__toolbar`}>
-            <span className={`${className}__toolbar-date`}>{formattedDate(singleData.createdAt)}</span>
-            <div className={`${className}__toolbar-icons-wrapper`}>
-              <ul className={`${className}__icons`}>
-                <li><FontAwesomeIcon icon={faShareAlt} /></li>
-                <li><FontAwesomeIcon icon={faBookmark} /></li>
-                <li><FontAwesomeIcon icon={faTrashAlt} className='icon-trash' onClick={() => deleteNote()} /></li>
-              </ul>
-            </div>
-          </div>
-        )
-      }
-
-      const changeText = editorState  => setEditorState(editorState)
-        // const result = await axios.put(
-        // `http://localhost:3001/api/notes/${cn}`, { title: 'changed title', content: JSON.stringify(convertToRaw(editorState.getCurrentContent()))}
-        // )
-        
-
-          // There was a change in the content 
-
-
-          // The change was triggered by a change in focus/selection
-        // const result = await axios.put(
-        //   `http://localhost:3001/api/notes/${cn}`, { ...singleData, content: JSON.stringify(convertToRaw(editorState.getCurrentContent()))}
-        //   ).then( result => {setSingleData(result.data)})
-   
-      
-      // To do:
-
-      // Fix problem with getting content JSON.parse?
-      
+    const ToolBar = () => {
       return (
-        <div>
-          {singleData &&
-            <div className={`${className}__wrapper`}>
-            <ToolBar />
-              <div className={`${className}__inner`}>
-                <p className={`${className}__title`}>{singleData.title}</p>
-                {console.log(JSON.stringify(convertToRaw(editorState.getCurrentContent())))}
-
-                <Editor editorState={editorState} onChange={changeText} />
-              </div>
-            </div>
-          }     
+        <div className={`${className}__toolbar`}>
+        <span className={`${className}__toolbar-date`}>{formattedDate(singleData.createdAt)}</span>
+          <div className={`${className}__toolbar-icons-wrapper`}>
+            <ul className={`${className}__icons`}>
+              <li><FontAwesomeIcon icon={faShareAlt} /></li>
+              <li><FontAwesomeIcon icon={faBookmark} /></li>
+              <li><FontAwesomeIcon icon={faTrashAlt} className='icon-trash' onClick={() => deleteNote()} /></li>
+            </ul>
+          </div>
         </div>
       )
+    }
+
+    const changeText = editorState => {
+      setEditorState(editorState)
+
+      const newData = { 
+        title: singleData.title, 
+        content: JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+      }
+
+      axios.put(`http://localhost:3001/api/notes/${cn}`, newData)
+    }
+
+      // ToDo:
+      // Editable Title
+      // Check for state change or focus - if content changes update content.
+      // Blank title on new note insert
+      
+    return (
+      <div>
+        {singleData &&
+          <div className={`${className}__wrapper`}>
+          <ToolBar />
+            <div className={`${className}__inner`}>
+              <p className={`${className}__title`}>{singleData.title}</p>
+              {console.log(JSON.stringify(convertToRaw(editorState.getCurrentContent())))}
+              <Editor editorState={editorState} onChange={changeText} />
+            </div>
+          </div>
+        }     
+      </div>
+    )
 }
