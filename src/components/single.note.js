@@ -39,7 +39,7 @@ export const SingleNoteView = ({cn}) => {
     }, [cn]);
 
     const deleteNote = () => {
-      axios.delete(`http://localhost:3001/api/notes/${cn}`).then(() => fetchData() & setSingleData(null))
+      axios.delete(`http://localhost:3001/api/notes/${cn}`).then(() => fetchData(), setSingleData(null))
     }
 
     const formattedDate = (nPDate) => {
@@ -81,10 +81,20 @@ export const SingleNoteView = ({cn}) => {
       axios.put(`http://localhost:3001/api/notes/${cn}`, newData)
     }
 
+    const handleChange = (e) => {
+      const newDataTitle = {
+        title: e.target.value, 
+        content:JSON.stringify(convertToRaw(editorState.getCurrentContent())),
+        createdAt: singleData.createdAt
+      }
+      setSingleData(newDataTitle)
+
+      axios.put(`http://localhost:3001/api/notes/${cn}`, newDataTitle).then( () => fetchData())
+    }
+
       // ToDo:
-      // Editable Title
       // Check for state change or focus - if content changes update content.
-      // Blank title on new note insert
+      // Local storage state reload
       
     return (
       <div>
@@ -92,7 +102,7 @@ export const SingleNoteView = ({cn}) => {
           <div className={`${className}__wrapper`}>
           <ToolBar />
             <div className={`${className}__inner`}>
-              <p className={`${className}__title`}>{singleData.title}</p>
+              <input type="text" className={`${className}__title`} value={singleData.title} placeholder="Title..." onChange={handleChange} />
               {console.log(JSON.stringify(convertToRaw(editorState.getCurrentContent())))}
               <Editor editorState={editorState} onChange={changeText} />
             </div>

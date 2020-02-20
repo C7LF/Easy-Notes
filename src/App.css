@@ -56,13 +56,11 @@ input:focus, textarea:focus {
   text-align: center;
   padding:24px 0;
 }
-
+.notes__single-wrapper {
+  flex:auto
+}
 .icon-trash {
   color:#db1818;
-}
-
-.single-note {
-  
 }
 .single-note__wrapper {
   padding:25px;
@@ -82,6 +80,7 @@ input.single-note__title {
  font-size:24px;
 }
 .single-note__toolbar {
+  display:flex;
 }
 .single-note__toolbar-date {
   font-weight: 100;
@@ -90,7 +89,7 @@ input.single-note__title {
 }
 .single-note__icons {
   list-style-type: none;
-  padding:0px 8px;
+  margin:0px;
 }
 .single-note__icons li {
   display: inline;
@@ -105,17 +104,5 @@ input.single-note__title {
   margin-left:5px;
 }
 .single-note__toolbar-icons-wrapper {
-  position: fixed;
-  right:25px;
-  top:15px;
-  box-shadow:
-  0 6px 10px rgba(0, 0, 0, 0.035),
-  0 48px 80px rgba(0, 0, 0, 0.07);
-  border-radius: 10px;
-  background: #eeeeee;
-  background: -moz-linear-gradient(top,  #eeeeee 0%, #eeeeee 100%);
-  background: -webkit-linear-gradient(top,  #eeeeee 0%,#eeeeee 100%);
-  background: linear-gradient(to bottom,  #eeeeee 0%,#eeeeee 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee',GradientType=0 );
-
+  margin-left:auto
 }

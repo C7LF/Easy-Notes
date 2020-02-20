@@ -33,7 +33,7 @@ export default function MainFunc() {
         </li>
       ))}
       </ul>
-      <div>
+      <div className={`${className}__single-wrapper`}>
         {currentNote && (
           <SingleNoteView cn={currentNote} />
         )}
