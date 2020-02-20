@@ -10,7 +10,7 @@ export const SideBar = () => {
 
     const [modal, setModal] = useState(false)
     const [newNote, setNewNote] = useState(
-      {title: "test", content: '{"blocks":[{"key":"b11l","text":"test","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'}
+      {title: "", content: '{"blocks":[{"key":"b11l","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'}
     );
 
     const newNotePage = () => {
@@ -38,19 +38,19 @@ export const SideBar = () => {
       return (
         <>
           <div className="notes__add-wrapper">
-              <div className="notes__bigform">
-                <form onSubmit={'handleSubmit'} className="notes__add-form">
-                  <div className="notes__text-inputs">
-                    <input type="text" name='title' placeholder="title..." value={newNote.title} onChange={handleChange} />
+            <div className="notes__bigform">
+              <form onSubmit={'handleSubmit'} className="notes__add-form">
+                <div className="notes__text-inputs">
+                  <input type="text" name='title' placeholder="title..." value={newNote.title} onChange={handleChange} />
                     <textarea name='content' placeholder="text..." value={newNote.content} onChange={handleChange} />
                   </div>
                   <div className="notes__button-input">
                     <input type="submit" />
                   </div>
-                 </form>
+                </form>
               </div>
             </div>
-            </>
+          </>
       )
     }
 
