@@ -56,8 +56,10 @@ export const SideBar = () => {
 
     return (
         <div className="sidebar">
+          <div className='sidebar-container'>
             <FontAwesomeIcon icon={faFile} onClick={() => newNotePage()} size="lg" />
             <Modal isVisible={modal} content={newNoteContent()}/>
+          </div>
         </div>
         
     )
