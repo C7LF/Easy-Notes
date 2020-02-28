@@ -95,6 +95,7 @@ export const SingleNoteView = ({cn}) => {
       // ToDo:
       // Check for state change or focus - if content changes update content.
       // Local storage state reload
+      // Store note as markdown or HTML?
       
     return (
       <div>

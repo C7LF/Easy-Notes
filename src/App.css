@@ -29,6 +29,12 @@ body,html {
 input:focus, textarea:focus {
   outline:0
 }
+.DraftEditor-root {
+  height: 500px !important;
+}
+.DraftEditor-editorContainer {
+  height:100% !important;
+}
 .notes__text-inputs input, .notes__text-inputs textarea {
   width:100%;
   box-sizing:border-box;
@@ -44,6 +50,7 @@ input:focus, textarea:focus {
   flex:15% 0 1;
   background-color:#fbfbfb;
   border-right: 1px solid #efefef;
+  max-height: 100vh;
 }
 .notes__item{
   padding:10px 16px;
@@ -59,6 +66,8 @@ input:focus, textarea:focus {
   background: linear-gradient(to top, #e1e8ff, #e2e2e2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   flex: 0 0 50px;
   text-align: center;
+}
+.sidebar-container {
   padding:24px 0;
 }
 .notes__single-wrapper {
@@ -68,7 +77,7 @@ input:focus, textarea:focus {
   color:#db1818;
 }
 .single-note__wrapper {
-  padding:25px;
+  padding:25px 25px 0 25px;
 }
 .single-note__inner {
   padding:25px 0px;
