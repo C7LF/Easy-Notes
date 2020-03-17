@@ -3,6 +3,8 @@ import axios from 'axios';
 import '../App.css';
 import {useGlobalState} from './state'
 import { SingleNoteView } from './single.note';
+import {Editor, convertToHTML, EditorState, ContentState, convertFromRaw, convertToRaw} from 'draft-js';
+
 
 export default function MainFunc() {
   const className = 'notes'
@@ -29,7 +31,7 @@ export default function MainFunc() {
       {data.map(item => (
         <li key={item._id} className="notes__item" onClick={() => {selectSingleNote(item._id)}}>
           {<p className={`${className}__item-title`}>{item.title}</p>}
-          {<p></p>}
+          {<p>{JSON.parse(item.content)}</p>}
         </li>
       ))}
       </ul>
