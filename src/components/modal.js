@@ -1,11 +1,15 @@
 import React from 'react'
 
 export const Modal = ({isVisible, content}) => (
-    isVisible ? (
+    isVisible ? ( 
         <>
-            {content}
+        <div class="overlay">
+            <div className="modal">
+                {content}
+            </div>
+        </div>
         </>
-    ) : (
+     ) : (
         null
     )
 )

@@ -35,7 +35,7 @@ export default function MainFunc() {
     return previewStr
   }
 
-  const checkForActive = (currentId) => (localStorage.getItem('Note Id') == currentId) && 'active'
+  const checkForActive = currentId => (localStorage.getItem('Note Id') == currentId) && 'active'
 
 
   return (
