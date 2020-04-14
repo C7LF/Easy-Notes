@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons'
 import { faBookmark } from '@fortawesome/free-solid-svg-icons'
-import {stateToHTML} from 'draft-js-export-html';
 import {Editor, convertToHTML, EditorState, ContentState, convertFromRaw, convertToRaw} from 'draft-js';
 import 'draft-js/dist/Draft.css'
 import { Modal } from './modal'
@@ -38,13 +37,12 @@ export const SingleNoteView = ({cn}) => {
     };
 
     useEffect(() => {
-      fetchSingleData();
+      fetchSingleData(cn);
 
       setTimeout( () => {
         setSingleNoteStatus(null)
-        // method to fetch previous note
-      }, 500)
-    }, [cn]);
+      }, 1000)
+    }, [cn, singleNoteStatus]);
 
     const deleteSingleNote = async () => {
       const result = await axios.delete(
@@ -54,9 +52,9 @@ export const SingleNoteView = ({cn}) => {
     };
 
     const noteStatus = (
-      <>
+      <div class="notification">
         <p>{singleNoteStatus}</p>
-      </>
+      </div>
     )
     
     const deleteNoteContent = () => (
@@ -70,32 +68,21 @@ export const SingleNoteView = ({cn}) => {
     )
 
     const deleteNoteReset = () => {
-      setSingleData(testData) // problem here, state needs updating when delete
+      setSingleData(null);
       fetchData();
       setModalVisible(false);
-    }
-
-    // testing data 
-
-    const testData = {
-      _id: "5e73eb1a79a31e3f306f6ff9",
-      title:"Untitled Note",
-      content: "{\"blocks\":[{\"key\":\"b11l\",\"text\":\"asdfadasdfa\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
-      createdAt:"2020-03-19T21:58:50.816Z" ,
-      updatedAt: "2020-03-31T15:07:39.348Z",
-      v: 0
     }
 
     const formattedDate = (nPDate) => {
       const createdDateParsed = new Date(Date.parse(nPDate))
       const day = createdDateParsed.getDate()
-      const monthData = createdDateParsed.getMonth()
+      const monthIndex = createdDateParsed.getMonth()
       const year = createdDateParsed.getFullYear()
 
       const month = ["January","February","March","April","May","June","July","August","September","October","November","December",];
 
-      const formattedString = day + ' ' + month[monthData] + ' ' + year
-
+      const formattedString = `${day} ${month[monthIndex]} ${year}`
+      
       return formattedString
     }
 
@@ -153,7 +140,7 @@ export const SingleNoteView = ({cn}) => {
             </div>
           </div>
         }
-        {noteStatus && noteStatus}    
+        {singleNoteStatus && noteStatus}    
       </div>
     )
 }

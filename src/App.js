@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 import MainFunc from './components/main.panel'
 import { SideBar } from './components/sidebar'
 
