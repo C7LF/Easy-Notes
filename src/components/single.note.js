@@ -105,7 +105,7 @@ export const SingleNoteView = ({cn}) => {
     }
 
     const changeText = editorState => {
-      // setEditorState(editorState)
+      setEditorState(editorState)
 
       // const newData = { 
       //   title: singleData.title, 
@@ -137,7 +137,7 @@ export const SingleNoteView = ({cn}) => {
           <ToolBar />
             <div className={`${className}__inner`}>
               <input type="text" className={`${className}__title`} value={singleData.title} placeholder="Title..." onChange={handleChange} />
-              {/* {console.log(JSON.stringify(convertToRaw(editorState.getCurrentContent())))} */}
+              {console.log(JSON.stringify(convertToRaw(editorState.getCurrentContent())))}
               <Editor editorState={editorState} onChange={changeText} plugins={[createMarkdownPlugin()]} />
             </div>
           </div>
