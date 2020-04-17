@@ -5,7 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons'
 import { faBookmark } from '@fortawesome/free-solid-svg-icons'
-import {Editor, convertToHTML, EditorState, ContentState, convertFromRaw, convertToRaw} from 'draft-js';
+import Editor from 'draft-js-plugins-editor';
+//import createMarkdownPlugin from 'draft-js-markdown-plugin';
+import createMarkdownShortcutsPlugin from 'draft-js-md-keyboard-plugin';
+import { EditorState, convertFromRaw, convertToRaw} from 'draft-js';
 import 'draft-js/dist/Draft.css'
 import { Modal } from './modal'
 
@@ -108,6 +111,7 @@ export const SingleNoteView = ({cn}) => {
       const newData = { 
         title: singleData.title, 
         content: JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+
       }
 
       axios.put(`http://localhost:3001/api/notes/${cn}`, newData)
@@ -135,8 +139,9 @@ export const SingleNoteView = ({cn}) => {
           <ToolBar />
             <div className={`${className}__inner`}>
               <input type="text" className={`${className}__title`} value={singleData.title} placeholder="Title..." onChange={handleChange} />
-              {console.log(JSON.stringify(convertToRaw(editorState.getCurrentContent())))}
-              <Editor editorState={editorState} onChange={changeText} />
+              {console.log(JSON.stringify(editorState.getCurrentContent()))}
+
+              <Editor editorState={editorState} onChange={changeText} plugins={[createMarkdownShortcutsPlugin()]} />
             </div>
           </div>
         }
