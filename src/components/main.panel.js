@@ -12,11 +12,9 @@ export default function MainFunc() {
   const [data, setData] = useGlobalState('data');
   const [currentNote, setCurrentNote] = useState(localStorage.getItem('Note Id'))
 
-  const fetchData = async () => {
-    const result = await axios(
-      'http://localhost:3001/api/notes',
-    ).then( result => {setData(result.data)})
-  };
+  const fetchData = async () =>  
+    await axios('http://localhost:3001/api/notes',)
+    .then( result => {setData(result.data)})
 
   useEffect(() => {
     fetchData();
@@ -34,15 +32,14 @@ export default function MainFunc() {
     return previewStr
   }
 
-  const checkForActive = currentId => (localStorage.getItem('Note Id') == currentId) ? 'active' : ''
-
+  const checkForActive = currentId => (localStorage.getItem('Note Id') === currentId) ? 'active' : null
 
   return (
     <>
-        <ul className={`${className}__list`}>
+      <ul className={`${className}__list`}>
         <SimpleBar style={{ maxHeight: window.innerHeight }}>
           {data.map(item => (
-            <li key={item._id} className={`notes__item ${checkForActive(item._id)}`} onClick={() => {selectSingleNote(item._id)}}>
+            <li key={item._id} className={`notes__item ${checkForActive(item._id)}`} onClick={() => selectSingleNote(item._id)}>
               <p className={`${className}__item-title`}>{item.title}</p>
               <p>{objectPreviewText(JSON.parse(item.content))}</p>
             </li>

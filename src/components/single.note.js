@@ -11,10 +11,11 @@ import createMarkdownShortcutsPlugin from 'draft-js-md-keyboard-plugin';
 import { EditorState, convertFromRaw, convertToRaw} from 'draft-js';
 import 'draft-js/dist/Draft.css'
 import { Modal } from './modal'
+import { formattedDate } from './utils'
 
 export const SingleNoteView = ({cn}) => {
     const [singleData, setSingleData] = useState();
-    const [data, setData] = useGlobalState('data');
+    const [, setData] = useGlobalState('data');
     const [editorState, setEditorState] = React.useState(
       EditorState.createEmpty()
     );
@@ -23,39 +24,38 @@ export const SingleNoteView = ({cn}) => {
 
     const className = 'single-note'
 
-    const fetchSingleData = async () => {
-      const result = await axios(
-        `http://localhost:3001/api/notes/${cn}`
-      ).then( result => {
-        setSingleData(result.data)
-        const contentState = convertFromRaw(JSON.parse(result.data.content));
-        setEditorState(EditorState.createWithContent(contentState))
-      })
-    };
-
-    const fetchData = async () => {
-      const result = await axios(
-        'http://localhost:3001/api/notes',
-        ).then( result => {setData(result.data)})
-    };
+    const fetchData = async () => 
+      await axios(
+      'http://localhost:3001/api/notes')
+      .then( res => {setData(res.data)})
+    
 
     useEffect(() => {
-      fetchSingleData(cn);
-
+      const fetchSingleData = async () => 
+      await axios(`http://localhost:3001/api/notes/${cn}`)
+        .then( res => {
+          setSingleData(res.data)
+          const contentState = convertFromRaw(JSON.parse(res.data.content));
+          setEditorState(EditorState.createWithContent(contentState))
+        }).catch( res => console.log(res))
+      fetchSingleData()
+      
       setTimeout( () => {
         setSingleNoteStatus(null)
-      }, 1000)
-    }, [cn, singleNoteStatus]);
+      }, 3000)
+    }, [cn]);
 
     const deleteSingleNote = async () => {
-      const result = await axios.delete(
+       await axios.delete(
         `http://localhost:3001/api/notes/${cn}`,
-        ).then( result => {setSingleNoteStatus(result.data.message)}
-        ).then(() => deleteNoteReset())
-    };
+        ).then( res => {
+          setSingleNoteStatus(res.data.message)
+          deleteNoteReset()
+        }).catch( res => console.log(res))
+      }
 
     const noteStatus = (
-      <div class="notification">
+      <div className="notification">
         <p>{singleNoteStatus}</p>
       </div>
     )
@@ -74,19 +74,7 @@ export const SingleNoteView = ({cn}) => {
       setSingleData(null);
       fetchData();
       setModalVisible(false);
-    }
-
-    const formattedDate = (nPDate) => {
-      const createdDateParsed = new Date(Date.parse(nPDate))
-      const day = createdDateParsed.getDate()
-      const monthIndex = createdDateParsed.getMonth()
-      const year = createdDateParsed.getFullYear()
-
-      const month = ["January","February","March","April","May","June","July","August","September","October","November","December",];
-
-      const formattedString = `${day} ${month[monthIndex]} ${year}`
-      
-      return formattedString
+      localStorage.clear()
     }
 
     const ToolBar = () => {
@@ -105,32 +93,29 @@ export const SingleNoteView = ({cn}) => {
       )
     }
 
-    const changeText = editorState => {
-      setEditorState(editorState)
+    const changeEditorText = newState => {
 
-      const newData = { 
-        title: singleData.title, 
-        content: JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+      if(editorState.getCurrentContent() !== newState.getCurrentContent()) {
+        const newData = { 
+          title: singleData.title, 
+          content: JSON.stringify(convertToRaw(newState.getCurrentContent()))
+        }
+        axios.put(`http://localhost:3001/api/notes/${cn}`, newData)
 
+        // Set new editor state when put is complete to prevent unecessary requests.
+        setEditorState(newState)
       }
-
-      axios.put(`http://localhost:3001/api/notes/${cn}`, newData)
     }
 
-    const handleChange = (e) => {
+    const changeTitleText = (e) => {
       const newDataTitle = {
         title: e.target.value, 
         content: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
-        createdAt: singleData.createdAt
       }
       setSingleData(newDataTitle)
 
       axios.put(`http://localhost:3001/api/notes/${cn}`, newDataTitle).then( () => fetchData())
     }
-
-      // ToDo:
-      // Check for state change or focus - if content changes update content.
-      // Store note as markdown or HTML?
       
     return (
       <div>
@@ -138,10 +123,8 @@ export const SingleNoteView = ({cn}) => {
           <div className={`${className}__wrapper`}>
           <ToolBar />
             <div className={`${className}__inner`}>
-              <input type="text" className={`${className}__title`} value={singleData.title} placeholder="Title..." onChange={handleChange} />
-              {console.log(JSON.stringify(editorState.getCurrentContent()))}
-
-              <Editor editorState={editorState} onChange={changeText} plugins={[createMarkdownShortcutsPlugin()]} />
+              <input type="text" className={`${className}__title`} value={singleData.title} placeholder="Title..." onChange={changeTitleText} />
+              <Editor editorState={editorState} onChange={changeEditorText} plugins={[createMarkdownShortcutsPlugin()]} />
             </div>
           </div>
         }
