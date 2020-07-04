@@ -7,13 +7,13 @@ import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 
 
-export default function MainFunc() {
+const Main = () => {
   const className = 'notes'
   const [data, setData] = useGlobalState('data');
   const [currentNote, setCurrentNote] = useState(localStorage.getItem('Note Id'))
 
   const fetchData = async () =>  
-    await axios('http://localhost:3001/api/v1/notes',)
+    await axios('/api/v1/notes',)
     .then( result => {setData(result.data)})
 
   useEffect(() => {
@@ -55,3 +55,4 @@ export default function MainFunc() {
   );
 }
 
+export default Main

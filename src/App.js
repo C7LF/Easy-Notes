@@ -1,13 +1,13 @@
 import React from 'react';
 import './App.scss';
-import MainFunc from './components/main.panel'
+import Main from './components/main.panel'
 import { SideBar } from './components/sidebar'
 
 function App() {
   return (
     <>
       <SideBar />
-      <MainFunc />
+      <Main />
     </>
   )
 }

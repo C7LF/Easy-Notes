@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons'
 import { faBookmark } from '@fortawesome/free-solid-svg-icons'
+import { faPalette } from '@fortawesome/free-solid-svg-icons'
 import Editor from 'draft-js-plugins-editor';
 import createMarkdownShortcutsPlugin from 'draft-js-md-keyboard-plugin';
 import { EditorState, convertFromRaw, convertToRaw} from 'draft-js';
@@ -26,14 +27,12 @@ export const SingleNoteView = ({cn}) => {
     const className = 'single-note'
 
     const fetchData = async () => 
-      await axios(
-      'http://localhost:3001/api/v1/notes')
+      await axios('/api/v1/notes')
       .then( res => {setData(res.data)})
     
-
     useEffect(() => {
       const fetchSingleData = async () => 
-      await axios(`http://localhost:3001/api/v1/notes/${cn}`)
+      await axios(`/api/v1/notes/${cn}`)
         .then( res => {
           setSingleData(res.data)
          
@@ -44,12 +43,12 @@ export const SingleNoteView = ({cn}) => {
       
       setTimeout( () => {
         setSingleNoteStatus(null)
-      }, 3000)
+      }, 5000)
     }, [cn]);
 
     const deleteSingleNote = async () => {
        await axios.delete(
-        `http://localhost:3001/api/v1/notes/${cn}`,
+        `/api/v1/notes/${cn}`,
         ).then( res => {
           setSingleNoteStatus(res.data.message)
           deleteNoteReset()
@@ -57,8 +56,10 @@ export const SingleNoteView = ({cn}) => {
       }
 
     const noteStatus = (
-      <div className="notification">
-        <p>{singleNoteStatus}</p>
+      <div className="notification" style={{ height: singleNoteStatus ? '30px' : '0px'}}>
+        <div className="notification__message">
+          <p>{singleNoteStatus}</p>
+        </div>
       </div>
     )
     
@@ -90,17 +91,18 @@ export const SingleNoteView = ({cn}) => {
       const newLabelData = {
         title: singleData.title, 
         content: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
-        label: currval
+        label: currval,
+        createdAt: singleData.createdAt
       }
 
       setSingleData(newLabelData)
-      await axios.put(`http://localhost:3001/api/v1/notes/${cn}`, newLabelData)
-      .then( () => fetchData())
+      await axios.put(`/api/v1/notes/${cn}`, newLabelData)
+      .then(() => setSingleData(newLabelData))
+      .then(() => fetchData())
     }
 
 
-    const labelDisplay =
-    (
+    const labelDisplay = (
       <div className={`${className}__label-section`}>
         {(singleData !== undefined && singleData.label !== null ) && singleData.label.map((colour, key) => (
           <div className={`${className}__label-single`} key={key} style={{backgroundColor: colour}} />
@@ -131,10 +133,10 @@ export const SingleNoteView = ({cn}) => {
     const ToolBar = () => {
       return (
         <div className={`${className}__toolbar`}>
-        <span className={`${className}__toolbar-date`}>{formattedDate(singleData.createdAt)}</span>
+        <span className={`${className}__toolbar-date`}>{(singleData && singleData.createdAt) && formattedDate(singleData.createdAt)}</span>
           <div className={`${className}__toolbar-icons-wrapper`}>
             <ul className={`${className}__icons`}>
-              <li onClick={() => toggleColourPalette()}>Colour</li>
+              <li onClick={() => toggleColourPalette()}><FontAwesomeIcon icon={faPalette} /></li>
               {ColourPalette}
               <li><FontAwesomeIcon icon={faShareAlt} /></li>
               <li><FontAwesomeIcon icon={faBookmark} /></li>
@@ -152,7 +154,7 @@ export const SingleNoteView = ({cn}) => {
           title: singleData.title, 
           content: JSON.stringify(convertToRaw(newState.getCurrentContent()))
         }
-        axios.put(`http://localhost:3001/api/v1/notes/${cn}`, newData)
+        axios.put(`/api/v1/notes/${cn}`, newData)
 
         // Set new editor state when put is complete to prevent unecessary requests.
         setEditorState(newState)
@@ -166,7 +168,7 @@ export const SingleNoteView = ({cn}) => {
       }
       setSingleData(newDataTitle)
 
-      axios.put(`http://localhost:3001/api/v1/notes/${cn}`, newDataTitle).then( () => fetchData())
+      axios.put(`/v1/notes/${cn}`, newDataTitle).then( () => fetchData())
     }
       
     return (
@@ -181,7 +183,7 @@ export const SingleNoteView = ({cn}) => {
             </div>
           </div>
         }
-        {singleNoteStatus && noteStatus}    
+        {noteStatus}    
       </div>
     )
 }

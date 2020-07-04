@@ -52,12 +52,14 @@ input:focus, textarea:focus {
   text-align: right;
 }
 .notification {
-  background-color: #c9d6ff;
-  position: absolute;
-  left:0;
-  bottom:0;
-  padding:10px;
-  transition: all .3 ease;
+  background-color:red;
+  width:100%;
+  transition: all ease-in 1s;
+
+  &__message {
+    text-align: center;
+  }
+
 }
 .simplebar-track.simplebar-horizontal {
   display: none;
@@ -253,8 +255,6 @@ input:focus, textarea:focus {
 .sidebar {
   height:100vh;
   background: #c9d6ff; /* fallback for old browsers */
-  background: -webkit-linear-gradient(to top, #e1e8ff, #e2e2e2); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to top, #e1e8ff, #e2e2e2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   flex: 0 0 50px;
   text-align: center;
 
