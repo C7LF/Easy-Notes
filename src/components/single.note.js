@@ -7,8 +7,8 @@ import { faShareAlt } from '@fortawesome/free-solid-svg-icons'
 import { faBookmark } from '@fortawesome/free-solid-svg-icons'
 import {stateToHTML} from 'draft-js-export-html';
 import {Editor, convertToHTML, EditorState, ContentState, convertFromRaw, convertToRaw} from 'draft-js';
-import 'draft-js/dist/Draft.css';
-import ls from 'local-storage'
+import 'draft-js/dist/Draft.css'
+import { Modal } from './modal'
 
 export const SingleNoteView = ({cn}) => {
     const [singleData, setSingleData] = useState();
@@ -16,6 +16,8 @@ export const SingleNoteView = ({cn}) => {
     const [editorState, setEditorState] = React.useState(
       EditorState.createEmpty()
     );
+    const [ModalVisible, setModalVisible] = useState();
+    const [singleNoteStatus, setSingleNoteStatus] = useState();
 
     const className = 'single-note'
 
@@ -37,10 +39,51 @@ export const SingleNoteView = ({cn}) => {
 
     useEffect(() => {
       fetchSingleData();
+
+      setTimeout( () => {
+        setSingleNoteStatus(null)
+        // method to fetch previous note
+      }, 500)
     }, [cn]);
 
-    const deleteNote = () => {
-      axios.delete(`http://localhost:3001/api/notes/${cn}`).then(() => fetchData(), setSingleData(null))
+    const deleteSingleNote = async () => {
+      const result = await axios.delete(
+        `http://localhost:3001/api/notes/${cn}`,
+        ).then( result => {setSingleNoteStatus(result.data.message)}
+        ).then(() => deleteNoteReset())
+    };
+
+    const noteStatus = (
+      <>
+        <p>{singleNoteStatus}</p>
+      </>
+    )
+    
+    const deleteNoteContent = () => (
+      <>
+        <span><strong>Delete Note</strong></span>
+        <p>Are you sure you want to <span className="primary-color">permanently</span> delete this note?</p>
+        <div className="deleteButtons">
+          <button className="btn" onClick={() => setModalVisible(false)}>Cancel</button><button className="btn primary-btn" onClick={() => deleteSingleNote()}>Yes</button>
+        </div>
+      </>
+    )
+
+    const deleteNoteReset = () => {
+      setSingleData(testData) // problem here, state needs updating when delete
+      fetchData();
+      setModalVisible(false);
+    }
+
+    // testing data 
+
+    const testData = {
+      _id: "5e73eb1a79a31e3f306f6ff9",
+      title:"Untitled Note",
+      content: "{\"blocks\":[{\"key\":\"b11l\",\"text\":\"asdfadasdfa\",\"type\":\"unstyled\",\"depth\":0,\"inlineStyleRanges\":[],\"entityRanges\":[],\"data\":{}}],\"entityMap\":{}}",
+      createdAt:"2020-03-19T21:58:50.816Z" ,
+      updatedAt: "2020-03-31T15:07:39.348Z",
+      v: 0
     }
 
     const formattedDate = (nPDate) => {
@@ -64,7 +107,8 @@ export const SingleNoteView = ({cn}) => {
             <ul className={`${className}__icons`}>
               <li><FontAwesomeIcon icon={faShareAlt} /></li>
               <li><FontAwesomeIcon icon={faBookmark} /></li>
-              <li><FontAwesomeIcon icon={faTrashAlt} className='icon-trash' onClick={() => deleteNote()} /></li>
+              <li><FontAwesomeIcon icon={faTrashAlt} className='icon-trash' onClick={() => setModalVisible(true)} /></li>
+              <Modal isVisible={ModalVisible} content={deleteNoteContent()} />
             </ul>
           </div>
         </div>
@@ -95,7 +139,6 @@ export const SingleNoteView = ({cn}) => {
 
       // ToDo:
       // Check for state change or focus - if content changes update content.
-      // Local storage state reload -- Id needs loading on page render
       // Store note as markdown or HTML?
       
     return (
@@ -109,7 +152,8 @@ export const SingleNoteView = ({cn}) => {
               <Editor editorState={editorState} onChange={changeText} />
             </div>
           </div>
-        }     
+        }
+        {noteStatus && noteStatus}    
       </div>
     )
 }

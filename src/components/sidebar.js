@@ -8,7 +8,6 @@ import { useGlobalState } from './state';
 export const SideBar = () => {
     const [data, setData] = useGlobalState('data');
 
-    const [modal, setModal] = useState(false)
     const [newNote, setNewNote] = useState(
       {title: "", content: '{"blocks":[{"key":"b11l","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'}
     );
@@ -27,38 +26,10 @@ export const SideBar = () => {
         ).then( result => {setData(result.data)})
     };
 
-    const modalState = () => !modal ? setModal(true) : setModal(false)
-
-    const newNoteContent = () => {
-
-      const handleChange = (event) => {
-        setNewNote({...newNote, [event.target.name]: event.target.value})
-      }
-      
-      return (
-        <>
-          <div className="notes__add-wrapper">
-            <div className="notes__bigform">
-              <form onSubmit={'handleSubmit'} className="notes__add-form">
-                <div className="notes__text-inputs">
-                  <input type="text" name='title' placeholder="title..." value={newNote.title} onChange={handleChange} />
-                    <textarea name='content' placeholder="text..." value={newNote.content} onChange={handleChange} />
-                  </div>
-                  <div className="notes__button-input">
-                    <input type="submit" />
-                  </div>
-                </form>
-              </div>
-            </div>
-          </>
-      )
-    }
-
     return (
         <div className="sidebar">
           <div className='sidebar-container'>
             <FontAwesomeIcon icon={faFile} onClick={() => newNotePage()} size="lg" />
-            <Modal isVisible={modal} content={newNoteContent()}/>
           </div>
         </div>
         
