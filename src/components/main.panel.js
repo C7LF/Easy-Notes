@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../App.scss';
-import {useGlobalState} from './state'
+import {useGlobalState} from '../global/state'
 import { SingleNoteView } from './single.note';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
@@ -13,7 +13,7 @@ export default function MainFunc() {
   const [currentNote, setCurrentNote] = useState(localStorage.getItem('Note Id'))
 
   const fetchData = async () =>  
-    await axios('http://localhost:3001/api/notes',)
+    await axios('http://localhost:3001/api/v1/notes',)
     .then( result => {setData(result.data)})
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function MainFunc() {
     return previewStr
   }
 
-  const checkForActive = currentId => (localStorage.getItem('Note Id') === currentId) ? 'active' : null
+  const checkForActive = currentId => (localStorage.getItem('Note Id') === currentId) ? 'active' : ''
 
   return (
     <>

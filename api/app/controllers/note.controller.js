@@ -11,11 +11,11 @@ exports.create = (req, res) => {
 
     const note = new Note({
         title: req.body.title || "Untitled Note",
-        content: req.body.content
+        content: req.body.content,
+        label: req.body.label
     })
 
-    note.save()
-    .then(data => {
+    note.save().then(data => {
         res.send(data)
     }).catch(err => {
         res.status(500).send({
@@ -70,7 +70,8 @@ exports.update = (req, res) => {
     // Find note and update it with the request body
     Note.findByIdAndUpdate(req.params.noteId, {
         title: req.body.title || "Untitled Note",
-        content: req.body.content
+        content: req.body.content,
+        label: req.body.label
     }, {new: true})
     .then(note => {
         if(!note) {

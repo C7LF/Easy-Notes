@@ -1,40 +1,42 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios';
-import { useGlobalState } from './state';
+import { useGlobalState } from '../global/state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons'
 import { faBookmark } from '@fortawesome/free-solid-svg-icons'
 import Editor from 'draft-js-plugins-editor';
-//import createMarkdownPlugin from 'draft-js-markdown-plugin';
 import createMarkdownShortcutsPlugin from 'draft-js-md-keyboard-plugin';
 import { EditorState, convertFromRaw, convertToRaw} from 'draft-js';
 import 'draft-js/dist/Draft.css'
 import { Modal } from './modal'
-import { formattedDate } from './utils'
+import { formattedDate } from '../global/utils'
 
 export const SingleNoteView = ({cn}) => {
-    const [singleData, setSingleData] = useState();
-    const [, setData] = useGlobalState('data');
+    const [singleData, setSingleData] = useState()
+    const [, setData] = useGlobalState('data')
     const [editorState, setEditorState] = React.useState(
       EditorState.createEmpty()
     );
-    const [ModalVisible, setModalVisible] = useState();
-    const [singleNoteStatus, setSingleNoteStatus] = useState();
+    const [ModalVisible, setModalVisible] = useState()
+    const [singleNoteStatus, setSingleNoteStatus] = useState()
+    const labelcolours = ['#d30000','#1a57db','#e29f0d']
+    const [colourPaletteVisible, setColourPaletteVisible] = useState()
 
     const className = 'single-note'
 
     const fetchData = async () => 
       await axios(
-      'http://localhost:3001/api/notes')
+      'http://localhost:3001/api/v1/notes')
       .then( res => {setData(res.data)})
     
 
     useEffect(() => {
       const fetchSingleData = async () => 
-      await axios(`http://localhost:3001/api/notes/${cn}`)
+      await axios(`http://localhost:3001/api/v1/notes/${cn}`)
         .then( res => {
           setSingleData(res.data)
+         
           const contentState = convertFromRaw(JSON.parse(res.data.content));
           setEditorState(EditorState.createWithContent(contentState))
         }).catch( res => console.log(res))
@@ -47,7 +49,7 @@ export const SingleNoteView = ({cn}) => {
 
     const deleteSingleNote = async () => {
        await axios.delete(
-        `http://localhost:3001/api/notes/${cn}`,
+        `http://localhost:3001/api/v1/notes/${cn}`,
         ).then( res => {
           setSingleNoteStatus(res.data.message)
           deleteNoteReset()
@@ -71,11 +73,60 @@ export const SingleNoteView = ({cn}) => {
     )
 
     const deleteNoteReset = () => {
-      setSingleData(null);
+      setSingleData(undefined);
       fetchData();
       setModalVisible(false);
       localStorage.clear()
     }
+
+    const addlabel = async (colour) => {
+      const currval = singleData.label
+      if(currval == null || !currval.includes(colour)) {
+        currval.push(colour)
+      } else {
+        currval.splice(currval.indexOf(colour), 1)
+      }
+      
+      const newLabelData = {
+        title: singleData.title, 
+        content: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
+        label: currval
+      }
+
+      setSingleData(newLabelData)
+      await axios.put(`http://localhost:3001/api/v1/notes/${cn}`, newLabelData)
+      .then( () => fetchData())
+    }
+
+
+    const labelDisplay =
+    (
+      <div className={`${className}__label-section`}>
+        {(singleData !== undefined && singleData.label !== null ) && singleData.label.map((colour, key) => (
+          <div className={`${className}__label-single`} key={key} style={{backgroundColor: colour}} />
+        ))}
+      </div>
+    ) 
+
+    const labelPicker = labelcolours.map((colour, key) => (
+        <>
+          <div className='colorlabel-item' onClick={() => addlabel(colour)} key={key} style={{ backgroundColor: colour }} />
+        </>
+      )
+    )
+
+    const toggleColourPalette = () => {
+      !colourPaletteVisible ? 
+        setColourPaletteVisible(true) : setColourPaletteVisible(false)
+    }
+
+    const ColourPalette = (
+      colourPaletteVisible && (
+        <div className="colour-pallete">
+          {labelPicker}
+        </div>
+      )
+    )
 
     const ToolBar = () => {
       return (
@@ -83,9 +134,11 @@ export const SingleNoteView = ({cn}) => {
         <span className={`${className}__toolbar-date`}>{formattedDate(singleData.createdAt)}</span>
           <div className={`${className}__toolbar-icons-wrapper`}>
             <ul className={`${className}__icons`}>
+              <li onClick={() => toggleColourPalette()}>Colour</li>
+              {ColourPalette}
               <li><FontAwesomeIcon icon={faShareAlt} /></li>
               <li><FontAwesomeIcon icon={faBookmark} /></li>
-              <li><FontAwesomeIcon icon={faTrashAlt} className='icon-trash' onClick={() => setModalVisible(true)} /></li>
+              <li onClick={() => setModalVisible(true)}><FontAwesomeIcon icon={faTrashAlt} className='icon-trash' /></li>
               <Modal isVisible={ModalVisible} content={deleteNoteContent()} />
             </ul>
           </div>
@@ -94,13 +147,12 @@ export const SingleNoteView = ({cn}) => {
     }
 
     const changeEditorText = newState => {
-
       if(editorState.getCurrentContent() !== newState.getCurrentContent()) {
         const newData = { 
           title: singleData.title, 
           content: JSON.stringify(convertToRaw(newState.getCurrentContent()))
         }
-        axios.put(`http://localhost:3001/api/notes/${cn}`, newData)
+        axios.put(`http://localhost:3001/api/v1/notes/${cn}`, newData)
 
         // Set new editor state when put is complete to prevent unecessary requests.
         setEditorState(newState)
@@ -114,7 +166,7 @@ export const SingleNoteView = ({cn}) => {
       }
       setSingleData(newDataTitle)
 
-      axios.put(`http://localhost:3001/api/notes/${cn}`, newDataTitle).then( () => fetchData())
+      axios.put(`http://localhost:3001/api/v1/notes/${cn}`, newDataTitle).then( () => fetchData())
     }
       
     return (
@@ -123,6 +175,7 @@ export const SingleNoteView = ({cn}) => {
           <div className={`${className}__wrapper`}>
           <ToolBar />
             <div className={`${className}__inner`}>
+              {labelDisplay}
               <input type="text" className={`${className}__title`} value={singleData.title} placeholder="Title..." onChange={changeTitleText} />
               <Editor editorState={editorState} onChange={changeEditorText} plugins={[createMarkdownShortcutsPlugin()]} />
             </div>

@@ -189,6 +189,21 @@ input:focus, textarea:focus {
   &__toolbar-icons-wrapper {
     margin-left:auto
   }
+  &__label-single {
+    border-radius: 5px;
+    width: 50px;
+    height: 8px;
+    margin-right:8px;
+  }
+  &__label-section {
+    display: flex;
+    padding:8px 8px 16px 0px
+  }
+}
+
+.colorlabel-item {
+  height: 20px;
+  width: 20px;
 }
 
 .active {
@@ -210,6 +225,16 @@ input:focus, textarea:focus {
 
 .icon-trash {
   color:#db1818;
+}
+
+.colour-pallete {
+  position: absolute;
+  border:1px solid #b7b7b7;
+  padding: 10px;
+
+  * {
+    display: inline-block;
+  }
 }
 
 // Draft Editor
