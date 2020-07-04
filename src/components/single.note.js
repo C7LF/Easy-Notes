@@ -8,6 +8,7 @@ import { faBookmark } from '@fortawesome/free-solid-svg-icons'
 import {stateToHTML} from 'draft-js-export-html';
 import {Editor, convertToHTML, EditorState, ContentState, convertFromRaw, convertToRaw} from 'draft-js';
 import 'draft-js/dist/Draft.css';
+import ls from 'local-storage'
 
 export const SingleNoteView = ({cn}) => {
     const [singleData, setSingleData] = useState();
@@ -84,7 +85,7 @@ export const SingleNoteView = ({cn}) => {
     const handleChange = (e) => {
       const newDataTitle = {
         title: e.target.value, 
-        content:JSON.stringify(convertToRaw(editorState.getCurrentContent())),
+        content: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
         createdAt: singleData.createdAt
       }
       setSingleData(newDataTitle)
@@ -94,7 +95,7 @@ export const SingleNoteView = ({cn}) => {
 
       // ToDo:
       // Check for state change or focus - if content changes update content.
-      // Local storage state reload
+      // Local storage state reload -- Id needs loading on page render
       // Store note as markdown or HTML?
       
     return (

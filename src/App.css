@@ -51,10 +51,17 @@ input:focus, textarea:focus {
   background-color:#fbfbfb;
   border-right: 1px solid #efefef;
   max-height: 100vh;
+  position: relative;
+  min-width: 200px;
+  max-width:300px;
+}
+.notes__item:hover {
+  cursor: pointer;
 }
 .notes__item{
   padding:10px 16px;
   border-bottom:1px solid #efefef;
+  position: relative;
 }
 .notes__item-title {
   font-weight: bold;
@@ -71,13 +78,13 @@ input:focus, textarea:focus {
   padding:24px 0;
 }
 .notes__single-wrapper {
-  flex:auto
+  flex: 1;
 }
 .icon-trash {
   color:#db1818;
 }
 .single-note__wrapper {
-  padding:25px 25px 0 25px;
+  padding:25px 60px 0 60px;
 }
 .single-note__inner {
   padding:25px 0px;
@@ -119,4 +126,19 @@ input.single-note__title {
 }
 .single-note__toolbar-icons-wrapper {
   margin-left:auto
+}
+.active {
+  background-color:#f1f1f1;
+}
+.active:after {
+  width: 0;
+  height: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  position: absolute;
+  border-right: 20px solid white;
+  content: '';
+  right: 0;
+  top: 30%;
+  margin-right:-1px
 }
