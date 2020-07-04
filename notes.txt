@@ -6,3 +6,8 @@ mongo
 
 // App Running
 npm run dev
+
+Issues:
+
+DraftJs with markdown plugin not compatible, downgrade temp fix
+https://github.com/withspectrum/draft-js-markdown-plugin/issues/181
