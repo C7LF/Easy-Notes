@@ -3,11 +3,11 @@ import React from 'react'
 export const Modal = ({isVisible, content}) => (
     isVisible ? ( 
         <>
-        <div class="overlay">
-            <div className="modal">
-                {content}
+            <div class="overlay">
+                <div className="modal">
+                    {content}
+                </div>
             </div>
-        </div>
         </>
      ) : (
         null
