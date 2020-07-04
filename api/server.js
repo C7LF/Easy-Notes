@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors =require('cors')
+const cors = require('cors')
+const passport = require("passport");
+const mongoose = require('mongoose');
 
 // create express app
 const app = express();
@@ -15,7 +17,8 @@ app.use(bodyParser.json())
 
 // Configuring the database
 const dbConfig = require('./config/database.config.js');
-const mongoose = require('mongoose');
+
+const users = require("./routes/user.route");
 
 mongoose.Promise = global.Promise;
 
@@ -34,8 +37,16 @@ app.get('/', (req, res) => {
     res.json({"message": "Notes API v1"});
 });
 
+// Passport config
+require("./config/passport")(passport);
+// Routes
+app.use("/api/users", users);
+
+// Passport middleware
+app.use(passport.initialize());
+
 // Require Notes routes
-require('./app/routes/note.routes.js')(app);
+require('./routes/note.routes.js')(app);
 
 // listen for requests
 app.listen(3001, () => {

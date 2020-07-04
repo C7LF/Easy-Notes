@@ -27,12 +27,12 @@ export const SingleNoteView = ({cn}) => {
     const className = 'single-note'
 
     const fetchData = async () => 
-      await axios('/api/v1/notes')
+      await axios('/api/notes')
       .then( res => {setData(res.data)})
     
     useEffect(() => {
       const fetchSingleData = async () => 
-      await axios(`/api/v1/notes/${cn}`)
+      await axios(`/api/notes/${cn}`)
         .then( res => {
           setSingleData(res.data)
          
@@ -48,7 +48,7 @@ export const SingleNoteView = ({cn}) => {
 
     const deleteSingleNote = async () => {
        await axios.delete(
-        `/api/v1/notes/${cn}`,
+        `/api/notes/${cn}`,
         ).then( res => {
           setSingleNoteStatus(res.data.message)
           deleteNoteReset()
@@ -96,7 +96,7 @@ export const SingleNoteView = ({cn}) => {
       }
 
       setSingleData(newLabelData)
-      await axios.put(`/api/v1/notes/${cn}`, newLabelData)
+      await axios.put(`/api/notes/${cn}`, newLabelData)
       .then(() => setSingleData(newLabelData))
       .then(() => fetchData())
     }
@@ -154,7 +154,7 @@ export const SingleNoteView = ({cn}) => {
           title: singleData.title, 
           content: JSON.stringify(convertToRaw(newState.getCurrentContent()))
         }
-        axios.put(`/api/v1/notes/${cn}`, newData)
+        axios.put(`/api/notes/${cn}`, newData)
 
         // Set new editor state when put is complete to prevent unecessary requests.
         setEditorState(newState)

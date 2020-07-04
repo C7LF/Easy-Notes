@@ -15,7 +15,7 @@ const Main = () => {
   const [currentNote, setCurrentNote] = useState(localStorage.getItem('Note Id'))
 
   const fetchData = async () =>  
-    await axios('/api/v1/notes',)
+    await axios('/api/notes',)
     .then( result => {setData(result.data)})
 
   useEffect(() => {

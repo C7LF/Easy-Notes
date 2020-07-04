@@ -14,14 +14,14 @@ export const SideBar = () => {
     };
 
     const newNotePage = async () => 
-    await axios.post('/api/v1/notes', newNote)
+    await axios.post('/api/notes', newNote)
       .then(fetchData())
       .catch(function (error) {
         console.log(error)
       }).then(fetchData())
 
     const fetchData = async () => 
-    await axios('/api/v1/notes')
+    await axios('/api/notes')
       .then( result => {setData(result.data)})
 
     return (
