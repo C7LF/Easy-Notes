@@ -5,6 +5,8 @@ import {useGlobalState} from '../global/state'
 import { SingleNoteView } from './single.note';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
+import { Route } from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom'
 
 
 const Main = () => {
@@ -36,21 +38,27 @@ const Main = () => {
 
   return (
     <>
+    <Router>
       <ul className={`${className}__list`}>
         <SimpleBar style={{ maxHeight: window.innerHeight }}>
           {data.map(item => (
-            <li key={item._id} className={`notes__item ${checkForActive(item._id)}`} onClick={() => selectSingleNote(item._id)}>
-              <p className={`${className}__item-title`}>{item.title}</p>
-              <p>{objectPreviewText(JSON.parse(item.content))}</p>
-            </li>
+            <Link to={`/note/${item._id}`}>
+              <li key={item._id} className={`notes__item ${checkForActive(item._id)}`} onClick={() => selectSingleNote(item._id)}>
+                <p className={`${className}__item-title`}>{item.title}</p>
+                <p>{objectPreviewText(JSON.parse(item.content))}</p>
+              </li>
+            </Link>
           ))}
         </SimpleBar>
       </ul>
       <div className={`${className}__single-wrapper`}>
-        {currentNote && (
-          <SingleNoteView cn={currentNote} />
-        )}
+        <Route path='/note/:_id'>
+          {currentNote && (
+            <SingleNoteView cn={currentNote} />
+          )}
+        </Route>
       </div>
+      </Router>
     </>
   );
 }
