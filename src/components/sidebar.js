@@ -28,6 +28,7 @@ export const SideBar = () => {
         <div className="sidebar">
           <div className='sidebar-container'>
             <FontAwesomeIcon icon={faFile} onClick={() => newNotePage()} size="lg" />
+            
           </div>
         </div>  
     )
