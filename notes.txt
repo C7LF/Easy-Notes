@@ -11,3 +11,10 @@ Issues:
 
 DraftJs with markdown plugin not compatible, downgrade temp fix
 https://github.com/withspectrum/draft-js-markdown-plugin/issues/181
+
+
+todo:
+PATCH?
+
+block roots unless auth
+    - exclusive notes to one account

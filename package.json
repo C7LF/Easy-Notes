@@ -19,6 +19,7 @@
     "draft-js-markdown-shortcuts-plugin": "^0.5.0",
     "draft-js-md-keyboard-plugin": "^0.6.1",
     "draft-js-plugins-editor": "^3.0.0",
+    "is-empty": "^1.2.0",
     "jwt-decode": "^2.2.0",
     "local-storage": "^2.0.0",
     "mime": "^2.4.4",

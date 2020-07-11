@@ -1,5 +1,7 @@
 const Note = require('../models/note.model.js')
 
+const checkAuth = require('../middleware/check-auth');
+
 // Creating and saving new note
 exports.create = (req, res) => {
 

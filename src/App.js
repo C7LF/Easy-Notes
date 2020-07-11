@@ -1,25 +1,37 @@
 import React from 'react';
-import './App.scss';
-import Main from './components/main.panel'
-import { SideBar } from './components/sidebar'
-import { RegisterForm } from './components/auth/register';
 
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { BrowserRouter as Router, Link } from 'react-router-dom'
 
+import NotesWrapper from './components/notes'
+import Register from './components/auth/register';
+
+import Login from './components/auth/login';
+import PrivateRoute from './components/auth/private-routes'
+
+import { connect } from 'react-redux'
+
+import './App.scss';
+
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  }
+}
+
 function App() {
+
   return (
     <>
-
       <Router>
-        <Route path='/notes'>
-          <SideBar />
-          <Main />
-        </Route>
-        <Route path='/auth/register' component={RegisterForm} />
+        <Switch>
+          <PrivateRoute path='/notes' component={NotesWrapper} />
+        </Switch>
+        <Route path='/auth/register' component={Register} />
+        <Route path='/auth/login' component={Login} />
       </Router>
     </>
   )
 }
 
-export default App;
+export default connect(mapStateToProps)(App);

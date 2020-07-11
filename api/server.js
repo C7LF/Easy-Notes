@@ -39,6 +39,7 @@ app.get('/', (req, res) => {
 
 // Passport config
 require("./config/passport")(passport);
+
 // Routes
 app.use("/api/users", users);
 
