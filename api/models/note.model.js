@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const NoteSchema = mongoose.Schema({
+    author: String,
     title: String,
     content: String,
     label: [{

@@ -1,10 +1,7 @@
 const Note = require('../models/note.model.js')
 
-const checkAuth = require('../middleware/check-auth');
-
 // Creating and saving new note
 exports.create = (req, res) => {
-
     if(!req.body.content) {
         return res.status(400).send({
             message: "Note cannot be empty"
@@ -12,6 +9,7 @@ exports.create = (req, res) => {
     }
 
     const note = new Note({
+        author: req.body.author || "",
         title: req.body.title || "Untitled Note",
         content: req.body.content,
         label: req.body.label
@@ -38,8 +36,22 @@ exports.findAll = (req, res) => {
     })
 }
 
+// find and return all notes form author
+exports.findAllByAuthor = (req, res) => {
+    console.log(req.user._id)
+    Note.find({ author: req.user._id }) // get author id from jwt token
+        .then(notes => {
+            res.send(notes)
+        }).catch(err => {
+            res.status(500).send({
+                message: err.message || "Some error occured while fetching notes."
+            })
+        })
+}
+
 // find note with Id
 exports.findOne = (req, res) => {
+    console.log(req.user._id)
     Note.findById(req.params.noteId)
     .then(note => {
         if(!note) {
@@ -47,8 +59,15 @@ exports.findOne = (req, res) => {
                 message: "Note not found with id " + req.params.noteId
             })
         }
+        console.log(note.author + ' ' + req.user._id)
+        if (note.author != req.user._id) {
+            return res.status(401).send({
+                message: "Authentication Error"
+            })
+        }
         res.send(note)
     }).catch(err => {
+        console.log(err)
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
                 message: "Note not found with id " + req.params.noteId

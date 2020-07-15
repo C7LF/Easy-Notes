@@ -25,11 +25,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onRequestNotes: () => dispatch(requestNotes()),
+    onRequestNotes: (token) => dispatch(requestNotes(token)),
   }
 }
 
-const SingleNoteView = ({ currentNoteId, onRequestNotes }) => {
+const SingleNoteView = ({ onRequestNotes }) => {
   const [singleData, setSingleData] = useState()
   const [editorState, setEditorState] = React.useState(
     EditorState.createEmpty()
@@ -42,7 +42,13 @@ const SingleNoteView = ({ currentNoteId, onRequestNotes }) => {
 
   const className = 'single-note'
 
+  const currentNoteId = window.location.pathname.split('/')[2]
+
+
+  const jwtToken = localStorage.getItem("jwtToken")
+
   useEffect(() => {
+    console.log("TEST", currentNoteId)
     const fetchSingleData = async () =>
       await axios(`/api/notes/${currentNoteId}`)
         .then(res => {
@@ -87,7 +93,7 @@ const SingleNoteView = ({ currentNoteId, onRequestNotes }) => {
 
   const deleteNoteReset = () => {
     setSingleData(undefined);
-    onRequestNotes()
+    onRequestNotes(jwtToken)
     setModalVisible(false);
     localStorage.clear()
   }
@@ -110,7 +116,7 @@ const SingleNoteView = ({ currentNoteId, onRequestNotes }) => {
     setSingleData(newLabelData)
     await axios.put(`/api/notes/${currentNoteId}`, newLabelData)
       .then(() => setSingleData(newLabelData))
-      .then(() => onRequestNotes())
+      .then(() => onRequestNotes(jwtToken))
   }
 
 
@@ -184,7 +190,7 @@ const SingleNoteView = ({ currentNoteId, onRequestNotes }) => {
     }
     setSingleData(newDataTitle)
 
-    axios.put(`/api/notes/${currentNoteId}`, newDataTitle).then(() => onRequestNotes())
+    axios.put(`/api/notes/${currentNoteId}`, newDataTitle).then(() => onRequestNotes(jwtToken))
   }
 
   return (

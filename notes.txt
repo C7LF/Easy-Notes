@@ -12,9 +12,13 @@ Issues:
 DraftJs with markdown plugin not compatible, downgrade temp fix
 https://github.com/withspectrum/draft-js-markdown-plugin/issues/181
 
+First item in collection doesn't show active class when the single note is active
+
 
 todo:
 PATCH?
 
 block roots unless auth
-    - exclusive notes to one account
+    - exclusive notes to one account - DONE
+    - Put endpoint auth
+    - delete endpoint auth

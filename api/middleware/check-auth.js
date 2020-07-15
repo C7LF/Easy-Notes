@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const keys = require("../config/database.config");
+const passport = require("passport");
 
 module.exports = (req, res, next) => {
     try {

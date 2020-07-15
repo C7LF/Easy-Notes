@@ -43,6 +43,8 @@ require("./config/passport")(passport);
 // Routes
 app.use("/api/users", users);
 
+app.use('/user', passport.authenticate('jwt', {session: false}), users);
+
 // Passport middleware
 app.use(passport.initialize());
 

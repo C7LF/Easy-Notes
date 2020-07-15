@@ -19,13 +19,13 @@ const mapStateToProps = state => {
     notes: state.requestNotes.notes,
     isPending: state.requestNotes.isPending,
     error: state.requestNotes.error,
-    //auth: state.auth
+    auth: state.auth
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onRequestNotes: () => dispatch(requestNotes())
+    onRequestNotes: (token) => dispatch(requestNotes(token))
   }
 }
 
@@ -36,8 +36,11 @@ const Main = ({ notes, onRequestNotes}) => {
   const className = 'notes'
   const [currentNoteId, setCurrentNoteId] = useState(localStorage.getItem('Note Id'))
 
+  const jwtToken = localStorage.getItem('jwtToken')
+
   useEffect(() => {
-    onRequestNotes()
+    onRequestNotes(jwtToken)
+    console.log(routerNoteId)
   }, []);
 
   const selectSingleNote = noteId => {
@@ -53,7 +56,6 @@ const Main = ({ notes, onRequestNotes}) => {
   }
 
   const routerNoteId = window.location.pathname.split('/')[2]
-  console.log(routerNoteId)
 
   const checkForActive = currentId => (routerNoteId === currentId) ? 'active' : ''
 
@@ -75,9 +77,7 @@ const Main = ({ notes, onRequestNotes}) => {
         </ul>
         <div className={`${className}__single-wrapper`}>
           <Route path={`/notes/:_id`}>
-            {currentNoteId && (
               <SingleNoteView currentNoteId={routerNoteId} />
-            )}
           </Route>
         </div>
       </Router>

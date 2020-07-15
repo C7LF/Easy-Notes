@@ -8,9 +8,11 @@ import {
 } from './constants'
 
 // Fetch for all notes
-export const requestNotes = () => (dispatch) => {
+export const requestNotes = (token) => (dispatch) => {
     dispatch({ type: REQUEST_NOTES_PENDING })
-    fetch('/api/notes')
+    fetch('/api/notes', { headers: {
+        authorization: token
+    }})
         .then(res => res.json())
         .then(data => dispatch({ type: REQUEST_NOTES_SUCCESS, payload: data }))
         .catch(error => dispatch({ type: REQUEST_NOTES_FAILED, payload: error }))

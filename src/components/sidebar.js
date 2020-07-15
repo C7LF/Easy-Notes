@@ -9,7 +9,7 @@ import { logoutUser } from '../state/authActions'
 
 const mapDispatchToProps = dispatch => {
   return {
-    onRequestNotes: () => dispatch(requestNotes()),
+    onRequestNotes: (token) => dispatch(requestNotes(token)),
     onLogoutClick: () => dispatch(logoutUser())
   }
 }
@@ -26,7 +26,11 @@ const mapStateToProps = state => {
 const SideBar = ({ onRequestNotes, auth, onLogoutClick }) => {
 
   const { user } = auth
+
+  const jwtToken = localStorage.getItem("jwtToken")
+
   const newNote = {
+    author: user && user.id,
     label: [],
     title: '',
     content: '{"blocks":[{"key":"b11l","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}'
@@ -35,7 +39,7 @@ const SideBar = ({ onRequestNotes, auth, onLogoutClick }) => {
 
   const newNotePage = () => {
     axios.post('/api/notes', newNote)
-      .then(() => onRequestNotes())
+      .then(() => onRequestNotes(jwtToken))
       .catch(error => console.log(error))
   }
 

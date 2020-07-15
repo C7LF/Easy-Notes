@@ -99,4 +99,10 @@ router.post("/login", (req, res) => {
     });
 });
 
+
+/* GET user profile. */
+router.get('/profile', function(req, res, next) {
+    res.send(req.user);
+});
+
 module.exports = router
