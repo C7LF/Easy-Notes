@@ -7,7 +7,7 @@ module.exports = (app) => {
     const checkAuth = require('../middleware/check-auth');
 
     // Create a new Note
-    app.post('/api/notes', notes.create);
+    app.post('/api/notes', checkAuth, notes.create);
 
     // Retrieve all Notes
     app.get('/api/notes', passport.authenticate('jwt', { session: false }), checkAuth, notes.findAllByAuthor);
@@ -16,8 +16,8 @@ module.exports = (app) => {
     app.get('/api/notes/:noteId', passport.authenticate('jwt', { session: false }), checkAuth, notes.findOne);
 
     // Update a Note with noteId
-    app.put('/api/notes/:noteId', notes.update);
+    app.put('/api/notes/:noteId', passport.authenticate('jwt', { session: false }), checkAuth, notes.update);
 
     // Delete a Note with noteId
-    app.delete('/api/notes/:noteId', notes.delete);
+    app.delete('/api/notes/:noteId', passport.authenticate('jwt', { session: false }), checkAuth, notes.delete);
 }

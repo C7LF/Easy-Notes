@@ -100,6 +100,11 @@ exports.update = (req, res) => {
                 message: "Note not found with id " + req.params.noteId
             })
         }
+        if (note.author != req.user._id) {
+            return res.status(401).send({
+                message: "Authentication Error"
+            })
+        }
         res.send(note);
     }).catch(err => {
         if(err.kind === 'ObjectId') {
@@ -120,6 +125,11 @@ exports.delete = (req, res) => {
         if(!note) {
             return res.status(404).send({
                 message: "Note not found with id " + req.params.noteId
+            })
+        }
+        if (note.author != req.user._id) {
+            return res.status(401).send({
+                message: "Authentication Error"
             })
         }
         res.send({message: "Note deleted successfully!"});

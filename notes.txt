@@ -20,5 +20,6 @@ PATCH?
 
 block roots unless auth
     - exclusive notes to one account - DONE
-    - Put endpoint auth
-    - delete endpoint auth
+    - Put endpoint auth - DONE
+    - delete endpoint auth - DONE
+    - create endpoint auth - DONE
