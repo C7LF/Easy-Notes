@@ -1,0 +1,36 @@
+.auth {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    
+    &__box {
+        width:400px;
+        background-color: #fff;
+    }
+    &__back {
+        display: flex;
+        align-items: center;
+    }
+
+    &__intro {
+        &--heading {
+            margin: 0
+        }
+        &--text {
+            margin:0
+        }
+    }
+    &__input {
+        margin-top:10px;
+    }
+    &__actions {
+        margin-top: 35px;
+        display: flex;
+        
+        &--button {
+            margin-right:10px !important;
+        }
+    }
+}

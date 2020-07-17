@@ -11,6 +11,7 @@ import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css'
 import { Modal } from './modal'
 import { formattedDate } from '../helpers/format-date'
+import { useHistory } from "react-router-dom";
 
 import { connect } from 'react-redux'
 import { requestNotes } from '../state/actions'
@@ -37,6 +38,8 @@ const SingleNoteView = ({ onRequestNotes }) => {
   const [ModalVisible, setModalVisible] = useState()
   const [singleNoteStatus, setSingleNoteStatus] = useState()
   const [colourPaletteVisible, setColourPaletteVisible] = useState()
+
+  const history = useHistory();
 
   const labelcolours = ['#d30000', '#1a57db', '#e29f0d']
 
@@ -68,9 +71,12 @@ const SingleNoteView = ({ onRequestNotes }) => {
     await axios.delete(
       `/api/notes/${currentNoteId}`,
     ).then(res => {
-      setSingleNoteStatus(res.data.message)
       deleteNoteReset()
-    }).catch(res => console.log(res))
+      setSingleNoteStatus(res.data.message)
+    }).catch(res => {
+      console.log(res)
+      deleteNoteReset()
+    })
   }
 
   const noteStatus = (
@@ -92,10 +98,11 @@ const SingleNoteView = ({ onRequestNotes }) => {
   )
 
   const deleteNoteReset = () => {
-    setSingleData(undefined);
+    setSingleData(undefined)
     onRequestNotes(jwtToken)
-    setModalVisible(false);
-    localStorage.clear()
+    localStorage.removeItem("Note Id")
+    history.push("/notes")
+    setModalVisible(false)
   }
 
   const addlabel = async (colour) => {

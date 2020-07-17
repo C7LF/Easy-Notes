@@ -2,8 +2,15 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { loginUser } from "../../state/authActions";
+import { loginUser } from "../../../state/authActions";
 import classnames from "classnames";
+import Layout from "../layout/layout"
+
+import "../main.scss"
+
+import { TextField, Box, Button } from '@material-ui/core';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+
 class Login extends Component {
     constructor() {
         super();
@@ -44,74 +51,66 @@ class Login extends Component {
     render() {
         const { errors } = this.state;
         return (
-            <div className="container">
-                <div style={{ marginTop: "4rem" }} className="row">
-                    <div className="col s8 offset-s2">
-                        <Link to="/" className="btn-flat waves-effect">
-                            <i className="material-icons left">keyboard_backspace</i> Back to
-              home
-            </Link>
-                        <div className="col s12" style={{ paddingLeft: "11.250px" }}>
-                            <h4>
-                                <b>Login</b> below
-              </h4>
-                            <p className="grey-text text-darken-1">
-                                Don't have an account? <Link to="/register">Register</Link>
+            <Layout>
+                <div className="auth">
+                    <Box className="auth__box" p={5} boxShadow={1}>
+                        <Link to="/" className="auth__back">
+                            <KeyboardBackspaceIcon /> &nbsp; <span>Back</span>
+                        </Link>
+                        <div className="auth__intro">
+                            <h1 className="auth__intro--heading">Login</h1>
+                            <p className="auth__intro--text">
+                                Don't have an account? <Link to="/auth/register">Register here</Link>
                             </p>
                         </div>
                         <form noValidate onSubmit={this.onSubmit}>
-                            <div className="input-field col s12">
-                                <input
+                            <div className="auth__input">
+                                <TextField
+                                    fullWidth
+                                    label="Email"
                                     onChange={this.onChange}
                                     value={this.state.email}
                                     error={errors.email}
                                     id="email"
                                     type="email"
-                                    className={classnames("", {
-                                        invalid: errors.email || errors.emailnotfound
-                                    })}
+                                    helperText={errors.email || errors.emailnotfound}
                                 />
-                                <label htmlFor="email">Email</label>
-                                <span className="red-text">
-                                    {errors.email}
-                                    {errors.emailnotfound}
-                                </span>
                             </div>
-                            <div className="input-field col s12">
-                                <input
+                            <div className="auth__input">
+                                <TextField
+                                    fullWidth
+                                    label="Password"
                                     onChange={this.onChange}
                                     value={this.state.password}
                                     error={errors.password}
                                     id="password"
                                     type="password"
-                                    className={classnames("", {
-                                        invalid: errors.password || errors.passwordincorrect
-                                    })}
+                                    helperText={errors.password || errors.passwordincorrect}
                                 />
-                                <label htmlFor="password">Password</label>
-                                <span className="red-text">
-                                    {errors.password}
-                                    {errors.passwordincorrect}
-                                </span>
                             </div>
-                            <div className="col s12" style={{ paddingLeft: "11.250px" }}>
-                                <button
-                                    style={{
-                                        width: "150px",
-                                        borderRadius: "3px",
-                                        letterSpacing: "1.5px",
-                                        marginTop: "1rem"
-                                    }}
+                            <div className="auth__actions">
+                                <Button
+                                    className="auth__actions--button"
+                                    variant="contained" color="primary"
                                     type="submit"
-                                    className="btn btn-large waves-effect waves-light hoverable blue accent-3"
                                 >
                                     Login
-                </button>
+                                </Button>
+
+                                <Link to="/auth/register" className="auth__back">
+                                    <Button
+                                        className="auth__actions--button"
+                                        variant="outlined" color="default"
+                                        type="submit"
+                                    >
+                                        Sign up
+                                    </Button>
+                                </Link>
                             </div>
                         </form>
-                    </div>
+                    </Box>
                 </div>
-            </div>
+            </Layout>
         );
     }
 }
