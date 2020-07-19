@@ -1,6 +1,8 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFile } from '@fortawesome/free-solid-svg-icons'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import axios from 'axios'
 
 import { connect } from 'react-redux'
@@ -50,8 +52,8 @@ const SideBar = ({ onRequestNotes, auth, onLogoutClick }) => {
   return (
     <div className="sidebar">
       <div className='sidebar-container'>
-        <FontAwesomeIcon icon={faFile} onClick={() => newNotePage()} size="lg" />
-        {user.name}
+        <AddCircleOutlineIcon className="sidebar__new-note" onClick={() => newNotePage()} />
+        {/* {user.name}
         <button
           style={{
             width: "150px",
@@ -62,7 +64,8 @@ const SideBar = ({ onRequestNotes, auth, onLogoutClick }) => {
           onClick={() => logoutClick()}
         >
           Logout
-            </button>
+            </button> */}
+        <AccountCircleIcon onClick={() => logoutClick()} className="sidebar__account-icon" />
       </div>
     </div>
   )

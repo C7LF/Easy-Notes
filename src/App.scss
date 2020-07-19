@@ -1,66 +1,80 @@
 /* Styles */
 
 // Initlal
-body,html {
-  margin:0;
-  padding:0;
-    margin: 0;
+body,
+html {
+  margin: 0;
+  padding: 0;
+  margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #fff !important
 }
+
 #root {
   display: flex;
 }
+
 a {
-  color:#051844;
+  color: #051844;
   text-decoration: none;
+
   :hover {
     color: #000b21;
   }
 }
-input:focus, textarea:focus {
-  outline:0
+
+input:focus,
+textarea:focus {
+  outline: 0
 }
+
 .modal {
   position: fixed;
   z-index: 999;
   border-radius: 10px;
-  top:40%;
-  left:40%;
+  top: 40%;
+  left: 40%;
   background-color: #ffffff;
-  padding:25px;
+  padding: 25px;
 }
+
 .primary-btn {
-  background-color:#016795;
-  color:#fff;
+  background-color: #016795;
+  color: #fff;
 }
+
 .btn {
-  padding:8px 12px;
-  border:none;
+  padding: 8px 12px;
+  border: none;
   border-radius: 5px;
   cursor: pointer;
 }
+
 .overlay {
-  background-color:rgba(0, 0, 0, .3);
+  background-color: rgba(0, 0, 0, .3);
   position: absolute;
-  height:100%;
-  left:0;
-  top:0;
+  height: 100%;
+  left: 0;
+  top: 0;
   z-index: 998;
-  width:100%;
+  width: 100%;
 }
+
 .primary-color {
-  color:#016795;
+  color: #016795;
 }
+
 .deleteButtons {
   text-align: right;
 }
+
 .notification {
-  background-color:red;
-  width:100%;
+  background-color: red;
+  width: 100%;
   transition: all ease-in 1s;
 
   &__message {
@@ -68,9 +82,11 @@ input:focus, textarea:focus {
   }
 
 }
+
 .simplebar-track.simplebar-horizontal {
   display: none;
 }
+
 .simplebar-content {
   overflow-x: hidden;
 }
@@ -79,36 +95,44 @@ input:focus, textarea:focus {
 
 .notes {
   &__bigform {
-    padding:5px;
-    height:100%
+    padding: 5px;
+    height: 100%
   }
+
   &__add-wrapper {
     background-color: #efefef;
-    position: absolute;/*important*/
-    top: 50%;/*position Y halfway in*/
-    left: 50%;/*position X halfway in*/
-    transform: translate(-50%,-50%);/*move it halfway back(x,y)*/
-    width: 500px;/*any width*/
-    height: auto;/*any height*/
+    position: absolute;
+    /*important*/
+    top: 50%;
+    /*position Y halfway in*/
+    left: 50%;
+    /*position X halfway in*/
+    transform: translate(-50%, -50%);
+    /*move it halfway back(x,y)*/
+    width: 500px;
+    /*any width*/
+    height: auto;
+    /*any height*/
   }
+
   &__text-inputs {
-    width:100%;
-    background-color:#fff;
+    width: 100%;
+    background-color: #fff;
 
     textarea {
-      width:100%;
-      box-sizing:border-box;
-      border:none;
-      padding:8px;
-      font-size:14px;
+      width: 100%;
+      box-sizing: border-box;
+      border: none;
+      padding: 8px;
+      font-size: 14px;
     }
 
     input {
-      width:100%;
-      box-sizing:border-box;
-      border:none;
-      padding:8px;
-      font-size:14px;
+      width: 100%;
+      box-sizing: border-box;
+      border: none;
+      padding: 8px;
+      font-size: 14px;
 
       &[name='title'] {
         font-weight: bold;
@@ -117,22 +141,22 @@ input:focus, textarea:focus {
   }
 
   &__list {
-    list-style-type:none;
+    list-style-type: none;
     padding: 0px;
     line-height: .4em;
-    margin:0;
-    flex:15% 0 1;
-    background-color:#fbfbfb;
+    margin: 0;
+    flex: 15% 0 1;
+    background-color: #fbfbfb;
     border-right: 1px solid #efefef;
     max-height: 100vh;
     position: relative;
     min-width: 200px;
-    max-width:300px;
+    max-width: 300px;
   }
 
   &__item {
-    padding:10px 16px;
-    border-bottom:1px solid #efefef;
+    padding: 10px 16px;
+    border-bottom: 1px solid #efefef;
     position: relative;
 
     &:hover {
@@ -153,41 +177,45 @@ input:focus, textarea:focus {
 
 .single-note {
   &__wrapper {
-    padding:25px 60px 0 60px;
+    padding: 25px 60px 0 60px;
 
     input {
-      border:none;
-      width:100%;
+      border: none;
+      width: 100%;
     }
   }
+
   &__inner {
-    padding:25px 0px;
+    padding: 25px 0px;
   }
+
   &__title {
-    font-weight:bold;
-    font-size:24px;
+    font-weight: bold;
+    font-size: 24px;
   }
+
   &__toolbar {
-    display:flex;
+    display: flex;
 
     &-date {
       font-weight: 100;
-      color:#b7b7b7;
+      color: #b7b7b7;
       font-size: 14px;
     }
   }
+
   &__icons {
     list-style-type: none;
-    margin:0px;
-    
+    margin: 0px;
+
     li {
       display: inline;
       padding: 0 5px;
 
       &:last-child {
-        border-left:1px solid rgb(180, 180, 180);
-        padding-left:8px;
-        margin-left:5px;
+        border-left: 1px solid rgb(180, 180, 180);
+        padding-left: 8px;
+        margin-left: 5px;
       }
 
       &:hover {
@@ -195,18 +223,21 @@ input:focus, textarea:focus {
       }
     }
   }
+
   &__toolbar-icons-wrapper {
-    margin-left:auto
+    margin-left: auto
   }
+
   &__label-single {
     border-radius: 5px;
     width: 50px;
     height: 8px;
-    margin-right:8px;
+    margin-right: 8px;
   }
+
   &__label-section {
     display: flex;
-    padding:8px 8px 16px 0px
+    padding: 8px 8px 16px 0px
   }
 }
 
@@ -215,30 +246,23 @@ input:focus, textarea:focus {
   width: 20px;
 }
 
-.active {
-  background-color:#663c3c;
+a {
+  .active {
+    p {
 
-  &:after {
-    width: 0;
-    height: 0;
-    border-top: 20px solid transparent;
-    border-bottom: 20px solid transparent;
-    position: absolute;
-    border-right: 20px solid white;
-    content: '';
-    right: 0;
-    top: 30%;
-    margin-right:-1px
+      color: #3166d8;
+    }
   }
 }
 
+
 .icon-trash {
-  color:#db1818;
+  color: #db1818;
 }
 
 .colour-pallete {
   position: absolute;
-  border:1px solid #b7b7b7;
+  border: 1px solid #b7b7b7;
   padding: 10px;
 
   * {
@@ -251,21 +275,46 @@ input:focus, textarea:focus {
 .DraftEditor {
   &-root {
     height: 500px !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   }
+
   &-editorContainer {
-      height:100% !important;
+    height: 100% !important;
   }
 }
 
 // Sidebar
 
 .sidebar {
-  height:100vh;
-  background: #c9d6ff; /* fallback for old browsers */
+  height: 100vh;
+  background: #051844;
   flex: 0 0 50px;
   text-align: center;
+  color: #fff;
+
+  &__new-note {
+    width: 100% !important;
+    margin-top: 25px;
+
+    :hover {
+      cursor: pointer;
+    }
+  }
+
+  &__account-icon {
+    width: 100% !important;
+    margin-top: auto;
+    margin-bottom: 25px;
+    bottom: 0;
+
+    :hover {
+      cursor: pointer;
+    }
+  }
 
   &-container {
-    padding:24px 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 }

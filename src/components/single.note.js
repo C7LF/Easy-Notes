@@ -47,7 +47,6 @@ const SingleNoteView = ({ onRequestNotes }) => {
 
   const currentNoteId = window.location.pathname.split('/')[2]
 
-
   const jwtToken = localStorage.getItem("jwtToken")
 
   useEffect(() => {
