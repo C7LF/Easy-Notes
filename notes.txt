@@ -23,3 +23,5 @@ block roots unless auth
     - Put endpoint auth - DONE
     - delete endpoint auth - DONE
     - create endpoint auth - DONE
+
+fix memory leak (unmounted component) after delete http call

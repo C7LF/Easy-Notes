@@ -7,7 +7,8 @@ import {
     REQUEST_SINGLE_NOTE_SUCCESS,
     SET_CURRENT_USER,
     USER_LOADING,
-    GET_ERRORS
+    GET_ERRORS,
+    SET_ACCOUNT_PANE_OPEN 
 } from './constants'
 
 // Request all notes reducer
@@ -85,6 +86,19 @@ export const errorReducer = (state = initialStateError, action) => {
     switch(action.type) {
         case GET_ERRORS:
             return action.payload
+        default:
+            return state
+    }
+}
+
+// Account Panel
+
+const initialStateAccountPane = {accountPaneIsOpen: false}
+
+export const accountPaneReducer = (state = initialStateAccountPane, action) => {
+    switch(action.type) {
+        case SET_ACCOUNT_PANE_OPEN:
+            return {...state, accountPaneIsOpen: action.payload}
         default:
             return state
     }

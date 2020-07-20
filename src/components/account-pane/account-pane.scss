@@ -1,0 +1,40 @@
+.account-pane {
+    height: 100%;
+    width: 500px;
+    position: fixed;
+    background-color: #f1f1f1;
+    border-right: 1px solid #c3c3c3;
+    z-index: 3;
+    text-align: left;
+    padding: 25px;
+    color: #000;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-out;
+    top: 0;
+    left: 0;
+    text-align: center;
+
+    &__close-icon {
+        cursor: pointer;
+    }
+
+    &__account-icon {
+        width: 4em !important;
+        height: 4em !important;
+        color:#051844;
+    }
+
+    &__username {
+        font-size:1.7em;
+        font-weight:700;
+        margin:0;
+    }
+
+    &--active {
+        transform: translateX(0);
+    }
+
+    &__header {
+        text-align: right;
+    }
+}

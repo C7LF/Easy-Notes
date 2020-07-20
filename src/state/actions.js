@@ -4,7 +4,8 @@ import {
     REQUEST_NOTES_FAILED,
     REQUEST_SINGLE_NOTE_FAILED,
     REQUEST_SINGLE_NOTE_PENDING,
-    REQUEST_SINGLE_NOTE_SUCCESS
+    REQUEST_SINGLE_NOTE_SUCCESS,
+    SET_ACCOUNT_PANE_OPEN
 } from './constants'
 
 // Fetch for all notes
@@ -26,3 +27,8 @@ export const requestNotes = (token) => (dispatch) => {
 //         .then(data => dispatch({ type: REQUEST_SINGLE_NOTE_SUCCESS, payload: data }))
 //         .catch(error => dispatch({ type: REQUEST_SINGLE_NOTE_FAILED, payload: error }))
 // }
+
+export const setAccountPaneIsOpen = accountPaneIsOpen => ({
+        type: SET_ACCOUNT_PANE_OPEN,
+        payload: accountPaneIsOpen
+})
