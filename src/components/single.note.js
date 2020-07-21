@@ -11,7 +11,8 @@ import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css'
 import { Modal } from './modal'
 import { formattedDate } from '../helpers/format-date'
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom'
+
 
 import { connect } from 'react-redux'
 import { requestNotes } from '../state/actions'
@@ -30,7 +31,7 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const SingleNoteView = ({ onRequestNotes }) => {
+const SingleNoteView = ({ onRequestNotes, currentNoteId }) => {
   const [singleData, setSingleData] = useState()
   const [editorState, setEditorState] = React.useState(
     EditorState.createEmpty()
@@ -45,7 +46,7 @@ const SingleNoteView = ({ onRequestNotes }) => {
 
   const className = 'single-note'
 
-  const currentNoteId = window.location.pathname.split('/')[2]
+  //const currentNoteId = window.location.pathname.split('/')[2]
 
   const jwtToken = localStorage.getItem("jwtToken")
 
@@ -59,7 +60,9 @@ const SingleNoteView = ({ onRequestNotes }) => {
           const contentState = convertFromRaw(JSON.parse(res.data.content));
           setEditorState(EditorState.createWithContent(contentState))
         }).catch(res => console.log(res))
-    fetchSingleData()
+    if (currentNoteId) {
+      fetchSingleData()
+    }
 
     setTimeout(() => {
       setSingleNoteStatus(null)
@@ -67,12 +70,14 @@ const SingleNoteView = ({ onRequestNotes }) => {
   }, [currentNoteId]);
 
   const deleteSingleNote = async () => {
-    await axios.delete(
+    console.log("delete")
+    return axios.delete(
       `/api/notes/${currentNoteId}`,
     ).then(res => {
       deleteNoteReset()
       setSingleNoteStatus(res.data.message)
     }).catch(res => {
+      console.log("delete failed")
       console.log(res)
       deleteNoteReset()
     })
@@ -97,10 +102,10 @@ const SingleNoteView = ({ onRequestNotes }) => {
   )
 
   const deleteNoteReset = () => {
+    history.push("/notes")
     setSingleData(undefined)
     onRequestNotes(jwtToken)
     localStorage.removeItem("Note Id")
-    history.push("/notes")
     setModalVisible(false)
   }
 

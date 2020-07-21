@@ -19,5 +19,5 @@ module.exports = (app) => {
     app.put('/api/notes/:noteId', passport.authenticate('jwt', { session: false }), checkAuth, notes.update);
 
     // Delete a Note with noteId
-    app.delete('/api/notes/:noteId', notes.delete);
+    app.delete('/api/notes/:noteId', passport.authenticate('jwt', { session: false }), checkAuth, notes.delete);
 }

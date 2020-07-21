@@ -34,20 +34,24 @@ const AccountPane = ({
     const { user } = auth
 
     const isActive = isOpen ? 'account-pane--active' : ''
+    const isActiveBackground = isOpen ? 'backdrop--active' : ''
 
     return (
-        <div className={`account-pane ${isActive}`}>
-            <div className="account-pane__header">
-                <CloseIcon className="account-pane__close-icon" onClick={() => onSetPanelIsOpenClick(false)} />
-            </div>
-            <div className="account-pane__content">
-                <AccountCircleIcon className="account-pane__account-icon" />
-                <p className='account-pane__username'>{user.name}</p>
-                <Button onClick={() => onLogoutClick()} variant="contained" color="primary">
-                    Log Out
+        <>
+            <div className={`account-pane ${isActive}`}>
+                <div className="account-pane__header">
+                    <CloseIcon className="account-pane__close-icon" onClick={() => onSetPanelIsOpenClick(false)} />
+                </div>
+                <div className="account-pane__content">
+                    <AccountCircleIcon className="account-pane__account-icon" />
+                    <p className='account-pane__username'>{user.name}</p>
+                    <Button onClick={() => onLogoutClick()} variant="contained" color="primary">
+                        Log Out
                 </Button>
+                </div>
             </div>
-        </div>
+            <div className={`backdrop ${isActiveBackground}`} onClick={() => onSetPanelIsOpenClick(false)} />
+        </>
     )
 }
 
