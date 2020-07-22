@@ -29,12 +29,14 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const Main = ({ notes, onRequestNotes}) => {
+const Main = ({ notes, onRequestNotes }) => {
 
   //const userId = auth.user.id
 
   const className = 'notes'
   const [currentNoteId, setCurrentNoteId] = useState(localStorage.getItem('Note Id'))
+
+  const [searchField, setSearchField] = useState('')
 
   const jwtToken = localStorage.getItem('jwtToken')
 
@@ -59,13 +61,19 @@ const Main = ({ notes, onRequestNotes}) => {
 
   const checkForActive = currentId => (routerNoteId === currentId) ? 'active' : ''
 
+  const searchChange = (e) => setSearchField(e.target.value)
+
+  const filteredNotes = notes.filter(note => {
+    return note.title.toLowerCase().includes(searchField.toLowerCase())
+  })
 
   return (
     <>
       <Router>
         <ul className={`${className}__list`}>
+          <input type='search' className={`${className}__search`} onChange={searchChange} placeholder='search...' />
           <SimpleBar style={{ maxHeight: window.innerHeight }}>
-            {notes && notes.map(item => (
+            {filteredNotes && filteredNotes.map(item => (
               <Link to={`/notes/${item._id}`}>
                 <li key={item._id} className={`${className}__item ${checkForActive(item._id)}`} onClick={() => selectSingleNote(item._id)}>
                   <p className={`${className}__item-title`}>{item.title}</p>
@@ -77,7 +85,7 @@ const Main = ({ notes, onRequestNotes}) => {
         </ul>
         <div className={`${className}__single-wrapper`}>
           <Route path={`/notes/:_id`}>
-              <SingleNoteView currentNoteId={routerNoteId} />
+            <SingleNoteView currentNoteId={routerNoteId} />
           </Route>
         </div>
       </Router>

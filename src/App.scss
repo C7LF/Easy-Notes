@@ -154,6 +154,13 @@ textarea:focus {
     max-width: 300px;
   }
 
+  &__search {
+    width:100%;
+    padding:16px;
+    border:none;
+    background-color: #e4e4e4;
+  }
+
   &__item {
     padding: 10px 16px;
     border-bottom: 1px solid #efefef;
