@@ -47,7 +47,7 @@ const AccountPane = ({
                     <p className='account-pane__username'>{user.name}</p>
                     <Button onClick={() => onLogoutClick()} variant="contained" color="primary">
                         Log Out
-                </Button>
+                    </Button>
                 </div>
             </div>
             <div className={`backdrop ${isActiveBackground}`} onClick={() => onSetPanelIsOpenClick(false)} />

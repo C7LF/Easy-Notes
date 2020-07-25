@@ -15,3 +15,6 @@ export const SET_CURRENT_USER = "SET_CURRENT_USER"
 
 // Account Pane
 export const SET_ACCOUNT_PANE_OPEN = "SET_ACCOUNT_PANE_OPEN"
+
+// Note status
+export const GET_NOTE_STATUS = "GET_NOTE_STATUS"

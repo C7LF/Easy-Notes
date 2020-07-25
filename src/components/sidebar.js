@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import axios from 'axios'
@@ -6,12 +6,13 @@ import axios from 'axios'
 import AccountPane from './account-pane/account-pane'
 
 import { connect } from 'react-redux'
-import { requestNotes, setAccountPaneIsOpen } from '../state/actions'
+import { requestNotes, setAccountPaneIsOpen, setNoteStatus } from '../state/actions'
 
 const mapDispatchToProps = dispatch => {
   return {
     onRequestNotes: (token) => dispatch(requestNotes(token)),
-    onSetPanelIsOpenClick: (accountPaneIsOpen) => dispatch(setAccountPaneIsOpen(accountPaneIsOpen))
+    onSetPanelIsOpenClick: (accountPaneIsOpen) => dispatch(setAccountPaneIsOpen(accountPaneIsOpen)),
+    setNoteStatus: (status) => dispatch(setNoteStatus(status))
   }
 }
 
@@ -21,13 +22,16 @@ const mapStateToProps = state => {
     isPending: state.requestNotes.isPending,
     error: state.requestNotes.error,
     auth: state.auth,
+    noteStatus: state.noteStatus
   }
 }
 
 const SideBar = ({
   onRequestNotes,
   auth,
-  onSetPanelIsOpenClick
+  onSetPanelIsOpenClick,
+  noteStatus,
+  setNoteStatus
 }) => {
 
   const { user } = auth
@@ -47,14 +51,30 @@ const SideBar = ({
       .catch(error => console.log(error))
   }
 
-  return (
-    <div className="sidebar">
-      <div className='sidebar-container'>
-        <AddCircleOutlineIcon className="sidebar__new-note" onClick={() => newNotePage()} />
-        <AccountCircleIcon onClick={() => onSetPanelIsOpenClick(true)} className="sidebar__account-icon" />
-        <AccountPane />
-      </div>
+  const StatusNotification = (
+    <div className={`notification ${noteStatus ? 'notification--active' : ''}`}>
+      <span>{noteStatus}</span>
     </div>
+
+  )
+
+  useEffect(() => {
+    setTimeout(() => {
+      setNoteStatus(null)
+    }, 3000)
+  }, [noteStatus])
+
+  return (
+    <>
+      <div className="sidebar">
+        <div className='sidebar-container'>
+          <AddCircleOutlineIcon className="sidebar__new-note" onClick={() => newNotePage()} />
+          <AccountCircleIcon onClick={() => onSetPanelIsOpenClick(true)} className="sidebar__account-icon" />
+          <AccountPane />
+        </div>
+      </div>
+      {StatusNotification}
+    </>
   )
 }
 

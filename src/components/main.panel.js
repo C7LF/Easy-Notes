@@ -19,7 +19,6 @@ const mapStateToProps = state => {
     notes: state.requestNotes.notes,
     isPending: state.requestNotes.isPending,
     error: state.requestNotes.error,
-    auth: state.auth
   }
 }
 
@@ -30,8 +29,6 @@ const mapDispatchToProps = dispatch => {
 }
 
 const Main = ({ notes, onRequestNotes }) => {
-
-  //const userId = auth.user.id
 
   const className = 'notes'
   const [currentNoteId, setCurrentNoteId] = useState(localStorage.getItem('Note Id'))
@@ -50,11 +47,15 @@ const Main = ({ notes, onRequestNotes }) => {
     setCurrentNoteId(noteId)
   }
 
-  const objectPreviewText = x => {
+  const textPreview = x => {
     const allText = x.blocks.map(block => (!block.text.trim() && ' ') || block.text).join(' ')
-    const previewStr = allText.length > 10 ? allText.substring(0, 10) + "..." : allText
+    const previewStr = allText.length > 10 ? allText.substring(0, 20) + "..." : allText
 
     return previewStr
+  }
+
+  const titlePreview = x => {
+    return x.length > 32 ? x.substring(0,32) + "..." : x
   }
 
   const routerNoteId = window.location.pathname.split('/')[2]
@@ -76,8 +77,8 @@ const Main = ({ notes, onRequestNotes }) => {
             {filteredNotes && filteredNotes.map(item => (
               <Link to={`/notes/${item._id}`}>
                 <li key={item._id} className={`${className}__item ${checkForActive(item._id)}`} onClick={() => selectSingleNote(item._id)}>
-                  <p className={`${className}__item-title`}>{item.title}</p>
-                  <p>{objectPreviewText(JSON.parse(item.content))}</p>
+                  <p className={`${className}__item-title`}>{titlePreview(item.title)}</p>
+                  <p>{textPreview(JSON.parse(item.content))}</p>
                 </li>
               </Link>
             ))}

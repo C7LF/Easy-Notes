@@ -5,7 +5,8 @@ import {
     REQUEST_SINGLE_NOTE_FAILED,
     REQUEST_SINGLE_NOTE_PENDING,
     REQUEST_SINGLE_NOTE_SUCCESS,
-    SET_ACCOUNT_PANE_OPEN
+    SET_ACCOUNT_PANE_OPEN,
+    GET_NOTE_STATUS
 } from './constants'
 
 // Fetch for all notes
@@ -31,4 +32,9 @@ export const requestNotes = (token) => (dispatch) => {
 export const setAccountPaneIsOpen = accountPaneIsOpen => ({
         type: SET_ACCOUNT_PANE_OPEN,
         payload: accountPaneIsOpen
+})
+
+export const setNoteStatus = noteStatus => ({
+    type: GET_NOTE_STATUS,
+    payload: noteStatus
 })

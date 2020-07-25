@@ -13,25 +13,27 @@ import { Modal } from './modal'
 import { formattedDate } from '../helpers/format-date'
 import { useHistory } from 'react-router-dom'
 
+import { Button } from '@material-ui/core';
 
 import { connect } from 'react-redux'
-import { requestNotes } from '../state/actions'
+import { requestNotes, setNoteStatus } from '../state/actions'
 
 const mapStateToProps = state => {
   return {
     notes: state.requestNotes.notes,
     isPending: state.requestNotes.isPending,
-    error: state.requestNotes.error
+    error: state.requestNotes.error,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     onRequestNotes: (token) => dispatch(requestNotes(token)),
+    setNoteStatus: (status) => dispatch(setNoteStatus(status))
   }
 }
 
-const SingleNoteView = ({ onRequestNotes, currentNoteId }) => {
+const SingleNoteView = ({ setNoteStatus, onRequestNotes, currentNoteId }) => {
   const [singleData, setSingleData] = useState()
   const [editorState, setEditorState] = React.useState(
     EditorState.createEmpty()
@@ -46,8 +48,6 @@ const SingleNoteView = ({ onRequestNotes, currentNoteId }) => {
 
   const className = 'single-note'
 
-  //const currentNoteId = window.location.pathname.split('/')[2]
-
   const jwtToken = localStorage.getItem("jwtToken")
 
   useEffect(() => {
@@ -56,7 +56,6 @@ const SingleNoteView = ({ onRequestNotes, currentNoteId }) => {
       await axios(`/api/notes/${currentNoteId}`)
         .then(res => {
           setSingleData(res.data)
-
           const contentState = convertFromRaw(JSON.parse(res.data.content));
           setEditorState(EditorState.createWithContent(contentState))
         }).catch(res => console.log(res))
@@ -75,7 +74,7 @@ const SingleNoteView = ({ onRequestNotes, currentNoteId }) => {
       `/api/notes/${currentNoteId}`,
     ).then(res => {
       deleteNoteReset()
-      setSingleNoteStatus(res.data.message)
+      setNoteStatus(res.data.message)
     }).catch(res => {
       console.log("delete failed")
       console.log(res)
@@ -83,20 +82,18 @@ const SingleNoteView = ({ onRequestNotes, currentNoteId }) => {
     })
   }
 
-  const noteStatus = (
-    <div className="notification" style={{ height: singleNoteStatus ? '30px' : '0px' }}>
-      <div className="notification__message">
-        <p>{singleNoteStatus}</p>
-      </div>
-    </div>
-  )
-
   const deleteNoteContent = () => (
     <>
       <span><strong>Delete Note</strong></span>
       <p>Are you sure you want to <span className="primary-color">permanently</span> delete this note?</p>
       <div className="deleteButtons">
-        <button className="btn" onClick={() => setModalVisible(false)}>Cancel</button><button className="btn primary-btn" onClick={() => deleteSingleNote()}>Yes</button>
+        <Button onClick={() => setModalVisible(false)} variant="outlined" color="default">
+          Cancel
+        </Button>
+        &nbsp;
+        <Button onClick={() => deleteSingleNote()} variant="contained" color="primary">
+          Yes
+        </Button>
       </div>
     </>
   )
@@ -167,8 +164,6 @@ const SingleNoteView = ({ onRequestNotes, currentNoteId }) => {
           <ul className={`${className}__icons`}>
             <li onClick={() => toggleColourPalette()}><FontAwesomeIcon icon={faPalette} /></li>
             {ColourPalette}
-            <li><FontAwesomeIcon icon={faShareAlt} /></li>
-            <li><FontAwesomeIcon icon={faBookmark} /></li>
             <li onClick={() => setModalVisible(true)}><FontAwesomeIcon icon={faTrashAlt} className='icon-trash' /></li>
             <Modal isVisible={ModalVisible} content={deleteNoteContent()} />
           </ul>
@@ -210,13 +205,12 @@ const SingleNoteView = ({ onRequestNotes, currentNoteId }) => {
         <div className={`${className}__wrapper`}>
           <ToolBar />
           <div className={`${className}__inner`}>
-            {labelDisplay}
+            {singleData.label.length > 0 && labelDisplay}
             <input type="text" className={`${className}__title`} value={singleData.title} placeholder="Title..." onChange={changeTitleText} />
             <Editor editorState={editorState} onChange={changeEditorText} plugins={[createMarkdownShortcutsPlugin()]} />
           </div>
         </div>
       }
-      {noteStatus}
     </div>
   )
 }
