@@ -137,11 +137,8 @@ const SingleNoteView = ({ setNoteStatus, onRequestNotes, currentNoteId }) => {
   )
 
   const labelPicker = labelcolours.map((colour, key) => (
-    <>
-      <div className='colorlabel-item' onClick={() => addlabel(colour)} key={key} style={{ backgroundColor: colour }} />
-    </>
-  )
-  )
+    <div className='colorlabel-item' className={`${(singleData !== undefined && singleData.label !== null) && singleData.label.includes(colour) ? 'selected' : ''}`} onClick={() => addlabel(colour)} key={key} style={{ backgroundColor: colour, width: '20px', height: '20px' }} />
+  ))
 
   const toggleColourPalette = () => {
     !colourPaletteVisible ?
