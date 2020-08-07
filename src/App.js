@@ -19,8 +19,7 @@ const mapStateToProps = state => {
   }
 }
 
-function App() {
-
+const App = () => {
   return (
     <>
       <Router>

@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import axios from 'axios';
+import _ from "lodash";
+
+import { connect } from 'react-redux'
+import { requestNotes, setNoteStatus } from '../state/actions'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-import { faShareAlt } from '@fortawesome/free-solid-svg-icons'
-import { faBookmark } from '@fortawesome/free-solid-svg-icons'
-import { faPalette } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt, faPalette } from '@fortawesome/free-solid-svg-icons'
+import { Button } from '@material-ui/core';
+
 import Editor from 'draft-js-plugins-editor';
 import createMarkdownShortcutsPlugin from 'draft-js-md-keyboard-plugin';
 import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css'
-import { Modal } from './modal'
-import { formattedDate } from '../helpers/format-date'
-import { useHistory } from 'react-router-dom'
 
-import { Button } from '@material-ui/core';
-
-import { connect } from 'react-redux'
-import { requestNotes, setNoteStatus } from '../state/actions'
+import { Modal } from './modal/modal'
+import { formattedDate } from '../utils/format-date'
 
 const mapStateToProps = state => {
   return {
@@ -35,7 +35,7 @@ const mapDispatchToProps = dispatch => {
 
 const SingleNoteView = ({ setNoteStatus, onRequestNotes, currentNoteId }) => {
   const [singleData, setSingleData] = useState()
-  const [editorState, setEditorState] = React.useState(
+  const [editorState, setEditorState] = useState(
     EditorState.createEmpty()
   );
   const [ModalVisible, setModalVisible] = useState()
@@ -46,18 +46,21 @@ const SingleNoteView = ({ setNoteStatus, onRequestNotes, currentNoteId }) => {
 
   const labelcolours = ['#d30000', '#1a57db', '#e29f0d']
 
-  const className = 'single-note'
-
   const jwtToken = localStorage.getItem("jwtToken")
 
+  const className = 'single-note'
+
   useEffect(() => {
-    console.log("TEST", currentNoteId)
+    //console.log("TEST", currentNoteId)
     const fetchSingleData = async () =>
       await axios(`/api/notes/${currentNoteId}`)
         .then(res => {
           setSingleData(res.data)
           const contentState = convertFromRaw(JSON.parse(res.data.content));
-          setEditorState(EditorState.createWithContent(contentState))
+          const stateWithContent = EditorState.createWithContent(contentState)
+          const currentSelection = editorState.getSelection()
+          const stateWithContentAndSelection = EditorState.forceSelection(stateWithContent, currentSelection)
+          setEditorState(stateWithContentAndSelection)
         }).catch(res => console.log(res))
     if (currentNoteId) {
       fetchSingleData()
@@ -107,23 +110,16 @@ const SingleNoteView = ({ setNoteStatus, onRequestNotes, currentNoteId }) => {
   }
 
   const addlabel = async (colour) => {
-    const currval = singleData.label
-    if (currval == null || !currval.includes(colour)) {
-      currval.push(colour)
+    const noteLabels = singleData.label
+    if (noteLabels == null || !noteLabels.includes(colour)) {
+      noteLabels.push(colour)
     } else {
-      currval.splice(currval.indexOf(colour), 1)
+      noteLabels.splice(noteLabels.indexOf(colour), 1)
     }
 
-    const newLabelData = {
-      title: singleData.title,
-      content: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
-      label: currval,
-      createdAt: singleData.createdAt
-    }
+    setSingleData(prevState => ({...prevState, label: noteLabels}))
 
-    setSingleData(newLabelData)
-    await axios.put(`/api/notes/${currentNoteId}`, newLabelData)
-      .then(() => setSingleData(newLabelData))
+    await axios.put(`/api/notes/${currentNoteId}`, singleData)
       .then(() => onRequestNotes(jwtToken))
   }
 
@@ -137,7 +133,7 @@ const SingleNoteView = ({ setNoteStatus, onRequestNotes, currentNoteId }) => {
   )
 
   const labelPicker = labelcolours.map((colour, key) => (
-    <div className='colorlabel-item' className={`${(singleData !== undefined && singleData.label !== null) && singleData.label.includes(colour) ? 'selected' : ''}`} onClick={() => addlabel(colour)} key={key} style={{ backgroundColor: colour, width: '20px', height: '20px' }} />
+    <div className={`colorlabel-item ${(singleData !== undefined && singleData.label !== null) && singleData.label.includes(colour) ? 'selected' : ''}`} onClick={() => addlabel(colour)} key={key} style={{ backgroundColor: colour }} />
   ))
 
   const toggleColourPalette = () => {
@@ -169,31 +165,66 @@ const SingleNoteView = ({ setNoteStatus, onRequestNotes, currentNoteId }) => {
     )
   }
 
+  // const changeEditorText = newState => {
+  //   if (editorState.getCurrentContent() !== newState.getCurrentContent()) {
+  //     const newData = {
+  //       title: singleData.title,
+  //       content: JSON.stringify(convertToRaw(newState.getCurrentContent())),
+  //       label: singleData.label,
+  //       createdAt: singleData.createdAt
+  //     }
+
+  //     axios.put(`/api/notes/${currentNoteId}`, newData)
+
+  //     // Set new editor state when put is complete to prevent unecessary requests.
+  //     setEditorState(newState)
+  //   }
+  // }
+
+  // const textChange = useCallback(
+  //   _.throttle(eventData => axios.put(`/api/notes/${currentNoteId}`, eventData)
+  //     .then(() => onRequestNotes(jwtToken)), 1000, true),
+  //   []);
+
+
   const changeEditorText = newState => {
-    if (editorState.getCurrentContent() !== newState.getCurrentContent()) {
+    //if (editorState.getCurrentContent() !== newState.getCurrentContent()) {
+      console.log("fired")
+      const newValue = JSON.stringify(convertToRaw(newState.getCurrentContent()))
       const newData = {
         title: singleData.title,
         content: JSON.stringify(convertToRaw(newState.getCurrentContent())),
         label: singleData.label,
         createdAt: singleData.createdAt
       }
-      axios.put(`/api/notes/${currentNoteId}`, newData)
+      // textChange(newData)
 
-      // Set new editor state when put is complete to prevent unecessary requests.
       setEditorState(newState)
-    }
+
+      //setSingleData(prevState => ({...prevState, content: newValue}))
+
+      
+      if (editorState.getCurrentContent() !== newState.getCurrentContent()) {
+        console.log("Diff")
+        axios.put(`/api/notes/${currentNoteId}`, newData)
+      }
+
+    //}
+
   }
 
-  const changeTitleText = (e) => {
-    const newDataTitle = {
-      title: e.target.value,
-      content: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
-      label: singleData.label,
-      createdAt: singleData.createdAt
-    }
-    setSingleData(newDataTitle)
 
-    axios.put(`/api/notes/${currentNoteId}`, newDataTitle).then(() => onRequestNotes(jwtToken))
+  // Since singleData is updated every onChange, a re-render is caused, creating a new denounce function for each change.
+  // useCallback can be used to stop the debounce function running every re-render
+  const titleChange = useCallback(
+    _.debounce(eventData => axios.put(`/api/notes/${currentNoteId}`, eventData)
+      .then(() => onRequestNotes(jwtToken)), 1000, true),
+    []);
+
+  const changeTitleText = e => {
+    const newValue = e.target.value;
+    setSingleData(prevState => ({ ...prevState, title: newValue }))
+    titleChange(singleData)
   }
 
   return (
@@ -202,9 +233,9 @@ const SingleNoteView = ({ setNoteStatus, onRequestNotes, currentNoteId }) => {
         <div className={`${className}__wrapper`}>
           <ToolBar />
           <div className={`${className}__inner`}>
-            {singleData.label.length > 0 && labelDisplay}
+            {(singleData.label && singleData.label.length > 0) && labelDisplay}
             <input type="text" className={`${className}__title`} value={singleData.title} placeholder="Title..." onChange={changeTitleText} />
-            <Editor editorState={editorState} onChange={changeEditorText} plugins={[createMarkdownShortcutsPlugin()]} />
+            <Editor editorState={editorState} onChange={e => changeEditorText(e)} plugins={[createMarkdownShortcutsPlugin()]} />
           </div>
         </div>
       }
