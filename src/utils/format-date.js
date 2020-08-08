@@ -1,5 +1,5 @@
 // Date Formatter
-export const formattedDate = (nPDate) => {
+export const formattedDate = nPDate => {
     const createdDateParsed = new Date(Date.parse(nPDate))
     const day = createdDateParsed.getDate()
     const monthIndex = createdDateParsed.getMonth()

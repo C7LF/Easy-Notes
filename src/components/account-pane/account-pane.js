@@ -9,6 +9,8 @@ import { connect } from 'react-redux'
 
 import { Button } from '@material-ui/core';
 
+import logo from '../../static/md-notes.png'
+
 import './account-pane.scss'
 
 const mapDispatchToProps = dispatch => {
@@ -48,6 +50,9 @@ const AccountPane = ({
                     <Button onClick={() => onLogoutClick()} variant="contained" color="primary">
                         Log Out
                     </Button>
+                </div>
+                <div className="account-pane__footer">
+                    <img src={logo} width="150px" />
                 </div>
             </div>
             <div className={`backdrop ${isActiveBackground}`} onClick={() => onSetPanelIsOpenClick(false)} />
