@@ -2,9 +2,6 @@ import {
     REQUEST_NOTES_PENDING,
     REQUEST_NOTES_SUCCESS,
     REQUEST_NOTES_FAILED,
-    REQUEST_SINGLE_NOTE_FAILED,
-    REQUEST_SINGLE_NOTE_PENDING,
-    REQUEST_SINGLE_NOTE_SUCCESS,
     SET_ACCOUNT_PANE_OPEN,
     GET_NOTE_STATUS
 } from './constants'
@@ -19,15 +16,6 @@ export const requestNotes = (token) => (dispatch) => {
         .then(data => dispatch({ type: REQUEST_NOTES_SUCCESS, payload: data }))
         .catch(error => dispatch({ type: REQUEST_NOTES_FAILED, payload: error }))
 }
-
-// // Fetch a single note
-// export const requestSingleNote = (currentSingleNoteId) => (dispatch) => {
-//     dispatch({ type: REQUEST_NOTES_PENDING })
-//     fetch(`/api/notes/${currentSingleNoteId}`)
-//         .then(res => res.json())
-//         .then(data => dispatch({ type: REQUEST_SINGLE_NOTE_SUCCESS, payload: data }))
-//         .catch(error => dispatch({ type: REQUEST_SINGLE_NOTE_FAILED, payload: error }))
-// }
 
 export const setAccountPaneIsOpen = accountPaneIsOpen => ({
         type: SET_ACCOUNT_PANE_OPEN,

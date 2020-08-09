@@ -2,9 +2,6 @@ import {
     REQUEST_NOTES_PENDING,
     REQUEST_NOTES_SUCCESS,
     REQUEST_NOTES_FAILED,
-    REQUEST_SINGLE_NOTE_FAILED,
-    REQUEST_SINGLE_NOTE_PENDING,
-    REQUEST_SINGLE_NOTE_SUCCESS,
     SET_CURRENT_USER,
     USER_LOADING,
     GET_ERRORS,
@@ -31,26 +28,6 @@ export const requestNotes = (state = initialStateNotes, action = {}) => {
             return state
     }
 }
-
-// Request single note reducer
-// const initialStateSingleNote = {
-//     isPendingSingleNote: false,
-//     note: {},
-//     errorSingleNote: ''
-// }
-
-// export const requestSingleNote = (state = initialStateSingleNote, action = {}) => {
-//     switch (action.type) {
-//         case REQUEST_SINGLE_NOTE_PENDING:
-//             return Object.assign({}, state, { isPendingSingleNote: true })
-//         case REQUEST_SINGLE_NOTE_SUCCESS:
-//             return Object.assign({}, state, { note: action.payload, isPendingSingleNote: false })
-//         case REQUEST_SINGLE_NOTE_FAILED:
-//             return Object.assign({}, state, { note: action.payload, isPendingSingleNote: false })
-//         default:
-//             return state
-//     }
-// }
 
 
 // auth users

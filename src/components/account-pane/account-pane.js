@@ -52,7 +52,7 @@ const AccountPane = ({
                     </Button>
                 </div>
                 <div className="account-pane__footer">
-                    <img src={logo} width="150px" />
+                    <img src={logo} width="150px" alt="md-notes logo" />
                 </div>
             </div>
             <div className={`backdrop ${isActiveBackground}`} onClick={() => onSetPanelIsOpenClick(false)} />

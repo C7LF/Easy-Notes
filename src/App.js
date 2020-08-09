@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Route, Switch } from 'react-router-dom';
-import { BrowserRouter as Router, Link } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 import NotesWrapper from './components/notes'
 import Register from './components/auth/register/register';

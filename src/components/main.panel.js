@@ -75,8 +75,8 @@ const Main = ({ notes, onRequestNotes }) => {
           <input type='search' className={`${className}__search`} onChange={searchChange} placeholder='search...' />
           <SimpleBar style={{ maxHeight: window.innerHeight }}>
             {filteredNotes && filteredNotes.map(item => (
-              <Link to={`/notes/${item._id}`}>
-                <li key={item._id} className={`${className}__item ${checkForActive(item._id)}`} onClick={() => selectSingleNote(item._id)}>
+              <Link to={`/notes/${item._id}`} key={item._id}>
+                <li className={`${className}__item ${checkForActive(item._id)}`} onClick={() => selectSingleNote(item._id)}>
                   <p className={`${className}__item-title`}>{titlePreview(item.title)}</p>
                   <p>{textPreview(JSON.parse(item.content))}</p>
                 </li>

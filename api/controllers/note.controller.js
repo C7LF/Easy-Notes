@@ -59,7 +59,6 @@ exports.findOne = (req, res) => {
                 message: "Note not found with id " + req.params.noteId
             })
         }
-        console.log(note.author + ' ' + req.user._id)
         if (note.author != req.user._id) {
             return res.status(401).send({
                 message: "Authentication Error"

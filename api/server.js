@@ -22,6 +22,8 @@ const users = require("./routes/user.route");
 
 mongoose.Promise = global.Promise;
 
+mongoose.set('useFindAndModify', false);
+
 // Connecting to the database
 mongoose.connect(dbConfig.url, {
     useNewUrlParser: true

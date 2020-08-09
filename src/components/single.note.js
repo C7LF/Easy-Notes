@@ -165,32 +165,9 @@ const SingleNoteView = ({ setNoteStatus, onRequestNotes, currentNoteId }) => {
     )
   }
 
-  // const changeEditorText = newState => {
-  //   if (editorState.getCurrentContent() !== newState.getCurrentContent()) {
-  //     const newData = {
-  //       title: singleData.title,
-  //       content: JSON.stringify(convertToRaw(newState.getCurrentContent())),
-  //       label: singleData.label,
-  //       createdAt: singleData.createdAt
-  //     }
-
-  //     axios.put(`/api/notes/${currentNoteId}`, newData)
-
-  //     // Set new editor state when put is complete to prevent unecessary requests.
-  //     setEditorState(newState)
-  //   }
-  // }
-
-  // const textChange = useCallback(
-  //   _.throttle(eventData => axios.put(`/api/notes/${currentNoteId}`, eventData)
-  //     .then(() => onRequestNotes(jwtToken)), 1000, true),
-  //   []);
-
-
   const changeEditorText = newState => {
     //if (editorState.getCurrentContent() !== newState.getCurrentContent()) {
       console.log("fired")
-      const newValue = JSON.stringify(convertToRaw(newState.getCurrentContent()))
       const newData = {
         title: singleData.title,
         content: JSON.stringify(convertToRaw(newState.getCurrentContent())),
