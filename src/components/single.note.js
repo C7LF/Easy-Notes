@@ -61,6 +61,7 @@ const SingleNoteView = ({ setNoteStatus, onRequestNotes, currentNoteId }) => {
           const currentSelection = editorState.getSelection()
           const stateWithContentAndSelection = EditorState.forceSelection(stateWithContent, currentSelection)
           setEditorState(stateWithContentAndSelection)
+          console.log(singleData)
         }).catch(res => console.log(res))
     if (currentNoteId) {
       fetchSingleData()
@@ -201,7 +202,14 @@ const SingleNoteView = ({ setNoteStatus, onRequestNotes, currentNoteId }) => {
   const changeTitleText = e => {
     const newValue = e.target.value;
     setSingleData(prevState => ({ ...prevState, title: newValue }))
-    titleChange(singleData)
+    console.log(singleData)
+    const newData = {
+      title: newValue,
+      content: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
+      label: singleData.label,
+      createdAt: singleData.createdAt
+    }
+    titleChange(newData)
   }
 
   return (
@@ -211,7 +219,7 @@ const SingleNoteView = ({ setNoteStatus, onRequestNotes, currentNoteId }) => {
           <ToolBar />
           <div className={`${className}__inner`}>
             {(singleData.label && singleData.label.length > 0) && labelDisplay}
-            <input type="text" className={`${className}__title`} value={singleData.title} placeholder="Title..." onChange={changeTitleText} />
+            <input type="text" className={`${className}__title`} value={singleData.title} placeholder="Title..." onChange={e => changeTitleText(e)} />
             <Editor editorState={editorState} onChange={e => changeEditorText(e)} plugins={[createMarkdownShortcutsPlugin()]} />
           </div>
         </div>

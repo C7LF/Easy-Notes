@@ -85,8 +85,8 @@ const Main = ({ notes, onRequestNotes }) => {
           </SimpleBar>
         </ul>
         <div className={`${className}__single-wrapper`}>
-          <Route path={`/notes/:_id`}>
-            <SingleNoteView currentNoteId={routerNoteId} />
+          <Route exact path={`/notes/:_id`}>
+            <SingleNoteView currentNoteId={currentNoteId} />
           </Route>
         </div>
       </Router>
